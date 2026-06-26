@@ -34,6 +34,7 @@ struct AppPill: View {
                     .foregroundStyle(style.foreground)
             }
             .padding()
+            .frame(maxWidth: .infinity)
             .background(.white)
             .overlay {
                 RoundedRectangle(cornerRadius: 12)
