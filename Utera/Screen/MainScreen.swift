@@ -26,10 +26,11 @@ struct MainScreen: View {
                     }
 
                     
-                    Tab("1", systemImage: "person.fill") {
-                        
+                    Tab("Profile", systemImage: "person.fill") {
+                        ProfileScreen()
                     }
                 }
+                .tint(Color("Primary"))
             } else {
                 OnboardingScreen()
             }
