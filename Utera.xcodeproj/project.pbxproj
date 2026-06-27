@@ -6,13 +6,32 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C8FABF2A2FEFA461002DE2C2 /* NewRelic in Frameworks */ = {isa = PBXBuildFile; productRef = C8FABF292FEFA461002DE2C2 /* NewRelic */; };
+		C8FABF2F2FEFA6AB002DE2C2 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C8869A542FEEB0D4006FF624 /* Utera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Utera.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C8FABF2D2FEFA631002DE2C2 /* Exceptions for "Utera" folder in "Utera" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C8869A532FEEB0D4006FF624 /* Utera */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C8869A562FEEB0D4006FF624 /* Utera */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C8FABF2D2FEFA631002DE2C2 /* Exceptions for "Utera" folder in "Utera" target */,
+			);
 			path = Utera;
 			sourceTree = "<group>";
 		};
@@ -23,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8FABF2A2FEFA461002DE2C2 /* NewRelic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -34,6 +54,7 @@
 			children = (
 				C8869A562FEEB0D4006FF624 /* Utera */,
 				C8869A552FEEB0D4006FF624 /* Products */,
+				C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -55,6 +76,7 @@
 				C8869A502FEEB0D4006FF624 /* Sources */,
 				C8869A512FEEB0D4006FF624 /* Frameworks */,
 				C8869A522FEEB0D4006FF624 /* Resources */,
+				C8FABF2B2FEFA4B8002DE2C2 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -65,6 +87,7 @@
 			);
 			name = Utera;
 			packageProductDependencies = (
+				C8FABF292FEFA461002DE2C2 /* NewRelic */,
 			);
 			productName = Utera;
 			productReference = C8869A542FEEB0D4006FF624 /* Utera.app */;
@@ -94,6 +117,9 @@
 			);
 			mainGroup = C8869A4B2FEEB0D4006FF624;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C8FABF282FEFA461002DE2C2 /* XCRemoteSwiftPackageReference "newrelic-ios-agent-spm" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C8869A552FEEB0D4006FF624 /* Products */;
 			projectDirPath = "";
@@ -109,10 +135,31 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8FABF2F2FEFA6AB002DE2C2 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C8FABF2B2FEFA4B8002DE2C2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ ${CONFIGURATION} = \"Debug\" ]; then\n  echo \"Skipping DSYM upload CONFIGURATION: ${CONFIGURATION}\"\n  exit 0\nfi\nARTIFACT_DIR=\"${BUILD_DIR%Build/*}\"\nSCRIPT=`/usr/bin/find \"${SRCROOT}\" \"${ARTIFACT_DIR}\" -type f -name run-symbol-tool | head -n 1`\n/bin/sh \"${SCRIPT}\" \"AA65da36fdb26f379a8da8525f2c11637781d373e7-NRMA\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C8869A502FEEB0D4006FF624 /* Sources */ = {
@@ -127,6 +174,7 @@
 /* Begin XCBuildConfiguration section */
 		C8869A5D2FEEB0D5006FF624 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -191,6 +239,7 @@
 		};
 		C8869A5E2FEEB0D5006FF624 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -256,6 +305,7 @@
 				DEVELOPMENT_TEAM = HK5U3FU2AP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Utera/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -288,6 +338,7 @@
 				DEVELOPMENT_TEAM = HK5U3FU2AP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Utera/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -332,6 +383,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C8FABF282FEFA461002DE2C2 /* XCRemoteSwiftPackageReference "newrelic-ios-agent-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/newrelic/newrelic-ios-agent-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.7.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C8FABF292FEFA461002DE2C2 /* NewRelic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C8FABF282FEFA461002DE2C2 /* XCRemoteSwiftPackageReference "newrelic-ios-agent-spm" */;
+			productName = NewRelic;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C8869A4C2FEEB0D4006FF624 /* Project object */;
 }
