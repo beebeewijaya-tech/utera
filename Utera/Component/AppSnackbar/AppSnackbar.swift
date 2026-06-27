@@ -8,18 +8,20 @@
 import SwiftUI
 
 enum SnackbarStyle {
-    case danger
+    case danger, success
     
     var background: Color {
         switch self {
         case .danger:
             return .red
+        case .success:
+            return .success
         }
     }
     
     var foreground: Color {
         switch self {
-        case .danger:
+        case .danger, .success:
             return .white
         }
     }
@@ -65,7 +67,7 @@ struct SnackbarModifier: ViewModifier {
     func body(content: Content) -> some View {
         content.overlay(alignment: .bottom) {
             if snackbarVM.isShowing {
-                AppSnackbar(message: snackbarVM.message, style: .danger)
+                AppSnackbar(message: snackbarVM.message, style: snackbarVM.type)
             }
         }
     }
