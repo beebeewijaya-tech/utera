@@ -35,6 +35,14 @@ struct HomeScreen: View {
         return date.formatted(.dateTime.month(.abbreviated).day())
     }
     
+    func resync() {
+        cyclesPredicted.forEach { modelContext.delete($0) }
+        predictionCycleVM.result = nil
+        Task {
+            await predictionCycleVM.generate(modelContext: modelContext)
+        }
+    }
+
     var body: some View {
         VStack {
             HStack {
@@ -72,6 +80,15 @@ struct HomeScreen: View {
                     .padding(.bottom, 20)
                 
                 VStack {
+                    Button {
+                        resync()
+                    } label: {
+                        Label("Re-sync", systemImage: "arrow.clockwise")
+                            .font(.caption)
+                            .foregroundStyle(Color("TextSecondary"))
+                    }
+                    .padding(.bottom, 4)
+
                     Text("Next period predicted \(nextPeriodFormatted)")
                         .font(.caption)
                         .bold()

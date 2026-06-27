@@ -21,8 +21,8 @@ struct MainScreen: View {
                         HomeScreen()
                     }
                     
-                    Tab("1", systemImage: "calendar") {
-                        
+                    Tab("Calendar", systemImage: "calendar") {
+                        CalendarScreen()
                     }
 
                     

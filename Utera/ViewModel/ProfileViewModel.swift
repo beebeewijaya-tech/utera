@@ -35,14 +35,18 @@ final class ProfileViewModel {
     }
 
     func save(cycle: CycleModel?, notification: NotificationModel?, context: ModelContext) {
-        guard let cycle, let notification else { return }
+        if let cycle { context.delete(cycle) }
+        if let notification { context.delete(notification) }
 
-        cycle.date = date
-        cycle.avgCycle = avgCycle
-        cycle.avgPeriod = avgPeriod
-        cycle.cycleRegular = selectedCycleRegular
-        cycle.trackingGoal = selectedTrackingGoal
-        notification.days = Int(notificationDays) ?? 0
+        context.insert(CycleModel(
+            date: date,
+            avgCycle: avgCycle,
+            avgPeriod: avgPeriod,
+            cycleRegular: selectedCycleRegular,
+            trackingGoal: selectedTrackingGoal,
+            hasSubmitted: true
+        ))
+        context.insert(NotificationModel(days: Int(notificationDays) ?? 0))
 
         try? context.save()
     }
