@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct UteraApp: App {
@@ -13,5 +14,6 @@ struct UteraApp: App {
         WindowGroup {
             MainScreen()
         }
+        .modelContainer(for: [CycleModel.self, NotificationModel.self])
     }
 }

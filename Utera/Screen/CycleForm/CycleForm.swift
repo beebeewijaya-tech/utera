@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct Pill: Identifiable {
     var id: UUID = UUID()
@@ -29,6 +30,9 @@ struct CycleForm: View {
         Pill(label: "Trying to conceive"),
         Pill(label: "Avoiding pregnancy")
     ]
+    
+    // MARK: - Model
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         ScrollView {
@@ -137,11 +141,15 @@ struct CycleForm: View {
 
                 
                 AppButton(label: "Continue", style: .primary) {
-                    cycleFormVM.submit()
+                    let res = cycleFormVM.submit(context: modelContext)
                     
                     if let err = cycleFormVM.errors.first {
                         snackbarVM.showMessage(err)
                         return
+                    }
+                    
+                    if res {
+                        onboardingVM.onboardingState = .finish
                     }
                 }
             }

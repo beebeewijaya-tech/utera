@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct OnboardingScreen: View {
-    @State private var onboardingVM = OnboardingViewModel()
+    // MARK: - ViewModel
+    @Environment(OnboardingViewModel.self) private var onboardingVM
 
     var body: some View {
         ZStack {
