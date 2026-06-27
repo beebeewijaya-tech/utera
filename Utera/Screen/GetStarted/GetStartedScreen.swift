@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct GetStartedScreen: View {
+    // MARK: - ViewModel
+    @Environment(OnboardingViewModel.self) private var onboardingVM
+    
+    
     var body: some View {
         VStack {
             Spacer()
@@ -40,7 +44,7 @@ struct GetStartedScreen: View {
             .padding(.bottom, 8)
             
             AppButton(label: "Get Started", style: .primary) {
-                
+                onboardingVM.onboardingState = .cycleForm
             }
         }
         .padding(.horizontal, 30)
@@ -56,4 +60,5 @@ struct GetStartedScreen: View {
         
         GetStartedScreen()
     }
+    .environment(OnboardingViewModel())
 }

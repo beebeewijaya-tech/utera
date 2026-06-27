@@ -7,12 +7,28 @@
 
 import SwiftUI
 
+struct Pill: Identifiable {
+    var id: UUID = UUID()
+    var label: String
+}
 
 struct CycleForm: View {
-    // MARK: - State
-    @State var date = Date()
-    @State var avgCycle: Int = 0
-    @State var avgPeriod: Int = 0
+    // MARK: - ViewModel
+    @Environment(OnboardingViewModel.self) private var onboardingVM
+    @Environment(SnackbarViewModel.self) private var snackbarVM
+    @State private var cycleFormVM = CycleFormViewModel()
+    
+    // MARK: - Property
+    @State private var cycleRegular: [Pill] = [
+        Pill(label: "Pretty regular"),
+        Pill(label: "Varies a lot"),
+        Pill(label: "Not sure")
+    ]
+    @State private var trackingGoal: [Pill] = [
+        Pill(label: "General tracking"),
+        Pill(label: "Trying to conceive"),
+        Pill(label: "Avoiding pregnancy")
+    ]
 
     var body: some View {
         ScrollView {
@@ -40,7 +56,7 @@ struct CycleForm: View {
                             .foregroundStyle(Color("Primary"))
                     }
                     
-                    DatePicker("", selection: $date, displayedComponents: .date)
+                    DatePicker("", selection: $cycleFormVM.date, displayedComponents: .date)
                 }
                 
                 AppSectionInput {
@@ -56,7 +72,7 @@ struct CycleForm: View {
                             .foregroundStyle(Color("TextSecondary"))
                     }
                     Spacer()
-                    AppCounter(value: $avgCycle, label: "d")
+                    AppCounter(value: $cycleFormVM.avgCycle, label: "d")
                 }
                 
                 AppSectionInput {
@@ -72,7 +88,7 @@ struct CycleForm: View {
                             .foregroundStyle(Color("TextSecondary"))
                     }
                     Spacer()
-                    AppCounter(value: $avgPeriod, label: "d")
+                    AppCounter(value: $cycleFormVM.avgPeriod, label: "d")
                 }
                 .padding(.bottom, 12)
                 
@@ -84,16 +100,11 @@ struct CycleForm: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            AppPill(label: "Pretty Regular", style: .inactive) {
-                                
-                            }
-                            
-                            AppPill(label: "Varies a lot", style: .inactive) {
-                                
-                            }
-                            
-                            AppPill(label: "Not sure", style: .inactive) {
-                                
+                            ForEach(cycleRegular.indices, id: \.self) { idx in
+                                let p = cycleRegular[idx]
+                                AppPill(label: p.label, style: cycleFormVM.cycleRegular == p.label ? .active : .inactive) {
+                                    cycleFormVM.cycleRegular = p.label
+                                }
                             }
                         }
                         .padding(.vertical, 8)
@@ -111,16 +122,11 @@ struct CycleForm: View {
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            AppPill(label: "General Tracking", style: .inactive) {
-                                
-                            }
-                            
-                            AppPill(label: "Trying to conceive", style: .inactive) {
-                                
-                            }
-                            
-                            AppPill(label: "Avoiding pregnancy", style: .inactive) {
-                                
+                            ForEach(trackingGoal.indices, id: \.self) { idx in
+                                let p = trackingGoal[idx]
+                                AppPill(label: p.label, style: cycleFormVM.trackingGoal == p.label ? .active : .inactive) {
+                                    cycleFormVM.trackingGoal = p.label
+                                }
                             }
                         }
                         .padding(.vertical, 8)
@@ -131,13 +137,19 @@ struct CycleForm: View {
 
                 
                 AppButton(label: "Continue", style: .primary) {
+                    cycleFormVM.submit()
                     
+                    if let err = cycleFormVM.errors.first {
+                        snackbarVM.showMessage(err)
+                        return
+                    }
                 }
             }
-            .padding(.horizontal, 30)
-            .padding(.vertical, 12)
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding(.horizontal, 30)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .snackbar()
     }
 }
 
@@ -149,4 +161,6 @@ struct CycleForm: View {
         
         CycleForm()
     }
+    .environment(OnboardingViewModel())
+    .environment(SnackbarViewModel())
 }
