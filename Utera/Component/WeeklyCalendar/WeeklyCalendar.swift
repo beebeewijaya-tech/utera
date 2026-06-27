@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum WeeklyCellStyle {
-    case active, inactive, ovulation
+    case active, inactive, ovulation, period
     
     
     var background: Color {
@@ -21,6 +21,9 @@ enum WeeklyCellStyle {
             
         case .ovulation:
             return Color("System")
+            
+        case .period:
+            return Color("Primary")
         }
     }
     
@@ -31,8 +34,8 @@ enum WeeklyCellStyle {
             
         case .inactive:
             return Color("TextPrimary")
-
-        case .ovulation:
+            
+        case .ovulation, .period:
             return .white
         }
     }
@@ -42,13 +45,15 @@ enum WeeklyCellStyle {
         case .active:
             return 2
             
-        case .inactive, .ovulation:
+        case .inactive, .ovulation, .period:
             return 0
         }
     }
 }
 
 struct WeeklyCalendar: View {
+    var cyclePredicted: CyclePromptTask?
+    
     // MARK: - Property
     let weekLetters = ["M", "T", "W", "T", "F", "S", "S"]
     var weekDates: [Date] {
@@ -61,13 +66,44 @@ struct WeeklyCalendar: View {
         }
     }
     
+    var indicators: [Date: WeeklyCellStyle] {
+        var result: [Date: WeeklyCellStyle] = [:]
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        guard let predicted = cyclePredicted,
+              let start = formatter.date(from: predicted.fertileWindowStart),
+              let end = formatter.date(from: predicted.fertileWindowEnd),
+              let nextPeriod = formatter.date(from: predicted.nextPeriodDate)
+        else { return result }
+        
+        // Mark entire fertile window
+        let days = Calendar.current.dateComponents([.day], from: start, to: end).day ?? 0
+        for offset in 0...days {
+            if let day = Calendar.current.date(byAdding: .day, value: offset, to: start) {
+                result[Calendar.current.startOfDay(for: day)] = .ovulation
+            }
+        }
+        
+        // Override last day as ovulation peak
+        result[Calendar.current.startOfDay(for: end)] = .ovulation
+        
+        // Next period
+        result[Calendar.current.startOfDay(for: nextPeriod)] = .period
+        
+        return result
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 ForEach(Array(weekDates.enumerated()), id: \.offset) { id, d in
                     let dayNumber = Calendar.current.component(.day, from: d)
                     let isToday = Calendar.current.isDateInToday(d)
-                    WeeklyCell(label: "\(weekLetters[id])", date: "\(dayNumber)", style: isToday ? .active : .inactive)
+                    let key = Calendar.current.startOfDay(for: d)
+                    let style: WeeklyCellStyle = isToday ? .active : (indicators[key] ?? .inactive)
+                    
+                    WeeklyCell(label: weekLetters[id], date: "\(dayNumber)", style: style)
                 }
             }
         }

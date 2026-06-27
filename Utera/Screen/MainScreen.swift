@@ -17,8 +17,8 @@ struct MainScreen: View {
         VStack {
             if onboardingVM.onboarding {
                 TabView {
-                    Tab("1", systemImage: "house.fill") {
-                        
+                    Tab("Home", systemImage: "house.fill") {
+                        HomeScreen()
                     }
                     
                     Tab("1", systemImage: "calendar") {

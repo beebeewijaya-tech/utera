@@ -21,6 +21,6 @@ struct UteraApp: App {
         WindowGroup {
             MainScreen()
         }
-        .modelContainer(for: [CycleModel.self, NotificationModel.self])
+        .modelContainer(for: [CycleModel.self, NotificationModel.self, CyclePredictModel.self])
     }
 }
