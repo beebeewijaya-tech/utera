@@ -9,6 +9,10 @@ import SwiftUI
 
 
 struct FinishOnboard: View {
+    // MARK: - ViewModel
+    @Environment(OnboardingViewModel.self) private var onboardingVM
+
+    
     var body: some View {
         VStack {
             Image(systemName: "bell.fill")
@@ -75,5 +79,6 @@ struct FinishOnboard: View {
         
         FinishOnboard()
     }
+    .environment(OnboardingViewModel())
 }
 

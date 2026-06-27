@@ -7,32 +7,28 @@
 
 import SwiftUI
 
-enum OnboardingState {
-    case getStarted, cycleForm, finish
-    
-    @ViewBuilder
-    func screen() -> some View {
-        switch self {
-        case .getStarted:
-            GetStartedScreen()
-        case .cycleForm:
-            EmptyView()
-        case .finish:
-            EmptyView()
-        }
-    }
-}
-
 struct OnboardingScreen: View {
-    @State private var pageState: OnboardingState = .getStarted
-    
+    @State private var onboardingVM = OnboardingViewModel()
+
     var body: some View {
         ZStack {
             Color("Background")
                 .ignoresSafeArea(.all)
             
-            pageState.screen()
+            switch onboardingVM.onboardingState {
+            case .getStarted:
+                GetStartedScreen()
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+            case .cycleForm:
+                CycleForm()
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+            case .finish:
+                FinishOnboard()
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
+            }
         }
+        .animation(.spring(duration: 0.1), value: onboardingVM.onboardingState)
+        .environment(onboardingVM)
     }
 }
 

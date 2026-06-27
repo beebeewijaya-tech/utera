@@ -9,8 +9,11 @@ import SwiftUI
 
 
 struct MainScreen: View {
+    // MARK: - Storage
     @AppStorage("onboarding") var onboarding: Bool = false
     
+    // MARK: - ViewModel
+    @State private var snackbarVM: SnackbarViewModel = SnackbarViewModel()
     
     var body: some View {
         VStack {
@@ -33,6 +36,7 @@ struct MainScreen: View {
                 OnboardingScreen()
             }
         }
+        .environment(snackbarVM)
     }
 }
 
