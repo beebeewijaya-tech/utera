@@ -6,9 +6,35 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeScreen: View {
+    // MARK: - Storage
+    @Query private var cycles: [CycleModel]
+    @Query private var cyclesPredicted: [CyclePredictModel]
+    private var cycle: CycleModel? {
+        cycles.first
+    }
+    private var cyclePredicted: CyclePredictModel? {
+        cyclesPredicted.first
+    }
+    @Environment(\.modelContext) private var modelContext: ModelContext
+    
+    // MARK: - State
     @State private var currentDate: Date = Date.now
+    
+    // MARK: - ViewModel
+    @State private var predictionCycleVM = PredictionCycleViewModel()
+    
+    
+    // MARK: - Property
+    var nextPeriodFormatted: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        guard let date = formatter.date(from: predictionCycleVM.result?.nextPeriodDate ?? "") else { return "" }
+        return date.formatted(.dateTime.month(.abbreviated).day())
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -38,22 +64,43 @@ struct HomeScreen: View {
             }
             .padding(.bottom, 30)
             
-            WeeklyCalendar()
+            WeeklyCalendar(cyclePredicted: predictionCycleVM.result)
                 .padding(.bottom, 20)
             
-            FertileWindow(currentDate: currentDate)
-                .padding(.bottom, 20)
-
-            VStack {
-                Text("Next period predicted Jul 29 (±2 days)")
-                    .font(.caption)
-                    .bold()
+            if !predictionCycleVM.isLoading {
+                FertileWindow(currentDate: currentDate, cyclePredicted: predictionCycleVM.result)
+                    .padding(.bottom, 20)
+                
+                VStack {
+                    Text("Next period predicted \(nextPeriodFormatted)")
+                        .font(.caption)
+                        .bold()
+                }
+            } else {
+                ProgressView()
             }
-            
             Spacer()
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 12)
+        .onAppear {
+            predictionCycleVM.load(cycle: cycle, cyclePredicted: cyclePredicted)
+            
+            if cyclePredicted == nil {
+                Task {
+                    await predictionCycleVM.generate(modelContext: modelContext)
+                    
+                    print(predictionCycleVM.result ?? "")
+                }
+            } else {
+                Task {
+                    try? await Task.sleep(for: .seconds(2))
+                    predictionCycleVM.isLoading = false
+                }
+            }
+            
+            print(predictionCycleVM.result)
+        }
     }
 }
 
