@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @Observable
 final class CycleFormViewModel {
@@ -70,10 +71,21 @@ final class CycleFormViewModel {
         errors.isEmpty
     }
     
-    func submit() {
+    func submit(context: ModelContext) -> Bool {
         hasSubmitted = true
-        guard isFormValid else { return }
+        guard isFormValid else { return false }
         
-        return
+        let cycleForm = CycleModel(
+            date: date,
+            avgCycle: avgCycle,
+            avgPeriod: avgPeriod,
+            cycleRegular: cycleRegular,
+            trackingGoal: trackingGoal,
+            hasSubmitted: hasSubmitted
+        )
+        
+        print("cycleForm: \(cycleForm)")
+        context.insert(cycleForm)
+        return true
     }
 }

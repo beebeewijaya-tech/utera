@@ -6,11 +6,24 @@
 //
 
 import SwiftUI
+import SwiftData
 
 
 struct FinishOnboard: View {
     // MARK: - ViewModel
     @Environment(OnboardingViewModel.self) private var onboardingVM
+    @Environment(SnackbarViewModel.self) private var snackbarVM
+    @State private var notificationVM = NotificationViewModel()
+    
+    // MARK: - Storage
+    @Environment(\.modelContext) private var modelContext
+    
+    // MARK: - Property
+    @State private var daysRemindMe: [Pill] = [
+        Pill(label: "3"),
+        Pill(label: "5"),
+        Pill(label: "7")
+    ]
 
     
     var body: some View {
@@ -44,16 +57,10 @@ struct FinishOnboard: View {
                 
                 
                 HStack {
-                    AppPill(label: "3 days", style: .inactive) {
-                        
-                    }
-                    
-                    AppPill(label: "5 days", style: .inactive) {
-                        
-                    }
-                    
-                    AppPill(label: "7 days", style: .inactive) {
-                        
+                    ForEach(daysRemindMe) { i in
+                        AppPill(label: "\(i.label) days", style: i.label == notificationVM.days ? .active : .inactive) {
+                            notificationVM.days = i.label
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -63,11 +70,23 @@ struct FinishOnboard: View {
             Spacer()
             
             AppButton(label: "Finish Setup", style: .primary) {
-                
+                Task {
+                    let res = await notificationVM.saveNotification(context: modelContext)
+                    if let err = notificationVM.errors.first {
+                        snackbarVM.showMessage(err)
+                        return
+                    }
+                    
+                    if res {
+                        // handle success
+                        onboardingVM.onboarding = true
+                    }
+                }
             }
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 12)
+        .snackbar()
     }
 }
 

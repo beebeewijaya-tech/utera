@@ -13,5 +13,8 @@ enum OnboardingState {
 
 @Observable
 final class OnboardingViewModel {
+    var onboarding: Bool = UserDefaults.standard.bool(forKey: "onboarding")  {
+        didSet { UserDefaults.standard.set(onboarding, forKey: "onboarding") }
+    }
     var onboardingState: OnboardingState = .getStarted
 }
