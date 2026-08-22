@@ -63,3 +63,6 @@ fastlane/test_output
 
 
 *.xcconfig
+
+# Local working PRDs (planning artifacts, not repo docs)
+docs/prd/
