@@ -24,10 +24,10 @@ enum LLMError: LocalizedError {
     }
 }
 
-actor LLMManager {
+actor LLMManager<T: Sendable & Generable> {
     var session: FoundationModels.LanguageModelSession?
-
-    func initialize() async throws -> LanguageModelSession? {
+    
+    func initialize() throws -> LanguageModelSession? {
         if let session { return session }
         
         let model = SystemLanguageModel.default
@@ -39,10 +39,8 @@ actor LLMManager {
         return session
     }
     
-    func generate<T: Sendable & Generable>(prompt: String) async throws -> T? {
-        let session = try await initialize()
-        let res = try await session?.respond(to: prompt, generating: T.self)
-        
-        return res?.content
+    func generate(prompt: String) async throws -> T? {
+        let session = try initialize()
+        return try await session?.respond(to: prompt, generating: T.self).content
     }
 }
