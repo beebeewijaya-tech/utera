@@ -1,6 +1,15 @@
 {
-  "originHash" : "f36db4f5918d47a2752ac2294796b44397471e1f8167c33d834dd45c536f587e",
+  "originHash" : "0e1bfb47c26caa9701a8e15533eec2514d10fcc9f4d33dcca782a474bdd4b148",
   "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire",
+      "state" : {
+        "revision" : "7595cbcf59809f9977c5f6378500de2ad73b7ddb",
+        "version" : "5.12.0"
+      }
+    },
     {
       "identity" : "newrelic-ios-agent-spm",
       "kind" : "remoteSourceControl",

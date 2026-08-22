@@ -29,7 +29,6 @@ struct OnboardingScreen: View {
             }
         }
         .animation(.spring(duration: 0.1), value: onboardingVM.onboardingState)
-        .environment(onboardingVM)
     }
 }
 

@@ -20,16 +20,14 @@ final class PredictionCycleViewModel {
     var isLoading = false
     var err = ""
     var result: CyclePromptTask?
-    
-    
+    let llm = LLMManager() // initialize llm manager here
+
     func generate(modelContext: ModelContext) async {
+        guard !isLoading else { return } // prevent double submit / race cond
         isLoading = true
+        defer { isLoading = false } // ensure to quit isLoading if function done
+        
         do {
-            let model = SystemLanguageModel.default
-            guard case .available = model.availability else {
-                err = "Apple intelligence not available"
-                return
-            }
             let prompt = """
                 Based on this user's cycle data, predict their cycle information.
                   
@@ -45,35 +43,40 @@ final class PredictionCycleViewModel {
                   - Ovulation typically occurs on cycle day \(avgCycle - 14)
                   - Fertile window is 5 days before ovulation through ovulation day
             """
-            let session = LanguageModelSession()
-            let response = try await session.respond(to: prompt, generating: CyclePromptTask.self)
-            
-            result = response.content
-            
+            let result: CyclePromptTask? = try await llm.generate(prompt: prompt)
             if result != nil {
                 modelContext.insert(CyclePredictModel(fertileWindowStart: result!.fertileWindowStart, fertileWindowEnd: result!.fertileWindowEnd, nextPeriodDate: result!.nextPeriodDate, advise: result!.advise))
             }
-            isLoading = false
         } catch {
-            isLoading = false
             err = error.localizedDescription
         }
     }
     
-    func load(cycle: CycleModel?, cyclePredicted: CyclePredictModel?) {
+    func load(modelContext: ModelContext, cycle: CycleModel?, cyclePredicted: CyclePredictModel?) async {
+        guard !isLoading else { return }
         isLoading = true
-        if let cycle = cycle {
-            date = cycle.date
-            avgCycle = cycle.avgCycle
-            avgPeriod = cycle.avgPeriod
-            selectedCycleRegular = cycle.cycleRegular
-            selectedTrackingGoal = cycle.trackingGoal
+        defer { isLoading = false }
+        
+        guard let cycle = cycle, let cyclePredicted = cyclePredicted else {
+            // not found will generate the prompt
+            await generate(modelContext: modelContext)
+            return
         }
         
-        if let cyclePredicted = cyclePredicted {
-            result = CyclePromptTask(
-                fertileWindowStart: cyclePredicted.fertileWindowStart, fertileWindowEnd: cyclePredicted.fertileWindowEnd, nextPeriodDate: cyclePredicted.nextPeriodDate, advise: cyclePredicted.advise
-            )
-        }
+        // cycle
+        date = cycle.date
+        avgCycle = cycle.avgCycle
+        avgPeriod = cycle.avgPeriod
+        selectedCycleRegular = cycle.cycleRegular
+        selectedTrackingGoal = cycle.trackingGoal
+        
+
+        // cycle prompt
+        result = CyclePromptTask(
+            fertileWindowStart: cyclePredicted.fertileWindowStart,
+            fertileWindowEnd: cyclePredicted.fertileWindowEnd,
+            nextPeriodDate: cyclePredicted.nextPeriodDate,
+            advise: cyclePredicted.advise
+        )
     }
 }

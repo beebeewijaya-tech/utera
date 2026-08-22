@@ -10,15 +10,17 @@ import SwiftData
 
 struct HomeScreen: View {
     // MARK: - Storage
+    @Environment(\.modelContext) private var modelContext: ModelContext
+    
     @Query private var cycles: [CycleModel]
     @Query private var cyclesPredicted: [CyclePredictModel]
+    
     private var cycle: CycleModel? {
         cycles.first
     }
     private var cyclePredicted: CyclePredictModel? {
         cyclesPredicted.first
     }
-    @Environment(\.modelContext) private var modelContext: ModelContext
     
     // MARK: - State
     @State private var currentDate: Date = Date.now
@@ -35,12 +37,12 @@ struct HomeScreen: View {
         return date.formatted(.dateTime.month(.abbreviated).day())
     }
     
-    func resync() {
+    func resync() async {
         cyclesPredicted.forEach { modelContext.delete($0) }
         predictionCycleVM.result = nil
-        Task {
-            await predictionCycleVM.generate(modelContext: modelContext)
-        }
+
+        // will call generate
+        await predictionCycleVM.generate(modelContext: modelContext)
     }
 
     var body: some View {
@@ -71,17 +73,16 @@ struct HomeScreen: View {
                     .shadow(color: .black.opacity(0.1), radius:1)
             }
             .padding(.bottom, 30)
-            
-            WeeklyCalendar(cyclePredicted: predictionCycleVM.result)
-                .padding(.bottom, 20)
-            
+                        
             if !predictionCycleVM.isLoading {
                 FertileWindow(currentDate: currentDate, cyclePredicted: predictionCycleVM.result)
                     .padding(.bottom, 20)
                 
                 VStack {
                     Button {
-                        resync()
+                        Task {
+                            await resync()
+                        }
                     } label: {
                         Label("Re-sync", systemImage: "arrow.clockwise")
                             .font(.caption)
@@ -100,23 +101,8 @@ struct HomeScreen: View {
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 12)
-        .onAppear {
-            predictionCycleVM.load(cycle: cycle, cyclePredicted: cyclePredicted)
-            
-            if cyclePredicted == nil {
-                Task {
-                    await predictionCycleVM.generate(modelContext: modelContext)
-                    
-                    print(predictionCycleVM.result ?? "")
-                }
-            } else {
-                Task {
-                    try? await Task.sleep(for: .seconds(2))
-                    predictionCycleVM.isLoading = false
-                }
-            }
-            
-            print(predictionCycleVM.result)
+        .task {
+            await predictionCycleVM.load(modelContext: modelContext, cycle: cycle, cyclePredicted: cyclePredicted)
         }
     }
 }

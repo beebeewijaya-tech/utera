@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C81B39E5303830D800A45D7C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C81B39E4303830D800A45D7C /* Alamofire */; };
 		C8FABF2A2FEFA461002DE2C2 /* NewRelic in Frameworks */ = {isa = PBXBuildFile; productRef = C8FABF292FEFA461002DE2C2 /* NewRelic */; };
-		C8FABF2F2FEFA6AB002DE2C2 /* Secrets.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8FABF2A2FEFA461002DE2C2 /* NewRelic in Frameworks */,
+				C81B39E5303830D800A45D7C /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,7 +77,6 @@
 				C8869A502FEEB0D4006FF624 /* Sources */,
 				C8869A512FEEB0D4006FF624 /* Frameworks */,
 				C8869A522FEEB0D4006FF624 /* Resources */,
-				C8FABF2B2FEFA4B8002DE2C2 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -88,6 +88,7 @@
 			name = Utera;
 			packageProductDependencies = (
 				C8FABF292FEFA461002DE2C2 /* NewRelic */,
+				C81B39E4303830D800A45D7C /* Alamofire */,
 			);
 			productName = Utera;
 			productReference = C8869A542FEEB0D4006FF624 /* YoUtera.app */;
@@ -101,7 +102,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2650;
-				LastUpgradeCheck = 2650;
+				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					C8869A532FEEB0D4006FF624 = {
 						CreatedOnToolsVersion = 26.5;
@@ -119,6 +120,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				C8FABF282FEFA461002DE2C2 /* XCRemoteSwiftPackageReference "newrelic-ios-agent-spm" */,
+				C81B39E3303830D800A45D7C /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C8869A552FEEB0D4006FF624 /* Products */;
@@ -135,31 +137,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8FABF2F2FEFA6AB002DE2C2 /* Secrets.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		C8FABF2B2FEFA4B8002DE2C2 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ ${CONFIGURATION} = \"Debug\" ]; then\n  echo \"Skipping DSYM upload CONFIGURATION: ${CONFIGURATION}\"\n  exit 0\nfi\nARTIFACT_DIR=\"${BUILD_DIR%Build/*}\"\nSCRIPT=`/usr/bin/find \"${SRCROOT}\" \"${ARTIFACT_DIR}\" -type f -name run-symbol-tool | head -n 1`\n/bin/sh \"${SCRIPT}\" \"AA65da36fdb26f379a8da8525f2c11637781d373e7-NRMA\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C8869A502FEEB0D4006FF624 /* Sources */ = {
@@ -232,6 +213,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -290,6 +272,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -329,7 +312,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -368,7 +351,7 @@
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -397,6 +380,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C81B39E3303830D800A45D7C /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.12.0;
+			};
+		};
 		C8FABF282FEFA461002DE2C2 /* XCRemoteSwiftPackageReference "newrelic-ios-agent-spm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/newrelic/newrelic-ios-agent-spm";
@@ -408,6 +399,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C81B39E4303830D800A45D7C /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C81B39E3303830D800A45D7C /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		C8FABF292FEFA461002DE2C2 /* NewRelic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C8FABF282FEFA461002DE2C2 /* XCRemoteSwiftPackageReference "newrelic-ios-agent-spm" */;

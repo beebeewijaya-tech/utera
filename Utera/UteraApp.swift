@@ -7,20 +7,17 @@
 
 import SwiftUI
 import SwiftData
-import NewRelic
 
 @main
 struct UteraApp: App {
-    
-    init() {
-        let token = Bundle.main.infoDictionary?["NEWRELIC_TOKEN"] as? String ?? ""
-        NewRelic.start(withApplicationToken: token)
-    }
-    
     var body: some Scene {
         WindowGroup {
             MainScreen()
         }
-        .modelContainer(for: [CycleModel.self, NotificationModel.self, CyclePredictModel.self])
+        .modelContainer(for: [
+            CycleModel.self,
+            NotificationModel.self,
+            CyclePredictModel.self
+        ])
     }
 }
