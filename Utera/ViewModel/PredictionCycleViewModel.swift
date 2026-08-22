@@ -20,10 +20,10 @@ final class PredictionCycleViewModel {
     var isLoading = false
     var err = ""
     var result: CyclePromptTask?
-    let llm = LLMManager() // initialize llm manager here
+    let llm = LLMManager<CyclePromptTask>() // initialize llm manager here
 
     func generate(modelContext: ModelContext) async {
-        guard !isLoading else { return } // prevent double submit / race cond
+        guard isLoading == false else { return } // prevent double submit / race cond
         isLoading = true
         defer { isLoading = false } // ensure to quit isLoading if function done
         
@@ -43,7 +43,7 @@ final class PredictionCycleViewModel {
                   - Ovulation typically occurs on cycle day \(avgCycle - 14)
                   - Fertile window is 5 days before ovulation through ovulation day
             """
-            let result: CyclePromptTask? = try await llm.generate(prompt: prompt)
+            result = try await llm.generate(prompt: prompt)
             if result != nil {
                 modelContext.insert(CyclePredictModel(fertileWindowStart: result!.fertileWindowStart, fertileWindowEnd: result!.fertileWindowEnd, nextPeriodDate: result!.nextPeriodDate, advise: result!.advise))
             }
@@ -53,15 +53,7 @@ final class PredictionCycleViewModel {
     }
     
     func load(modelContext: ModelContext, cycle: CycleModel?, cyclePredicted: CyclePredictModel?) async {
-        guard !isLoading else { return }
-        isLoading = true
-        defer { isLoading = false }
-        
-        guard let cycle = cycle, let cyclePredicted = cyclePredicted else {
-            // not found will generate the prompt
-            await generate(modelContext: modelContext)
-            return
-        }
+        guard let cycle else { return }
         
         // cycle
         date = cycle.date
@@ -70,6 +62,11 @@ final class PredictionCycleViewModel {
         selectedCycleRegular = cycle.cycleRegular
         selectedTrackingGoal = cycle.trackingGoal
         
+        guard let cyclePredicted else {
+            // not found will generate the prompt
+            await generate(modelContext: modelContext)
+            return
+        }
 
         // cycle prompt
         result = CyclePromptTask(

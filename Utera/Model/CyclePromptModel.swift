@@ -16,12 +16,14 @@ class CyclePredictModel {
     var fertileWindowEnd: String
     var nextPeriodDate: String
     var advise: String
+    var createdAt: Date
 
     init(fertileWindowStart: String, fertileWindowEnd: String, nextPeriodDate: String, advise: String) {
         self.fertileWindowStart = fertileWindowStart
         self.fertileWindowEnd = fertileWindowEnd
         self.nextPeriodDate = nextPeriodDate
         self.advise = advise
+        self.createdAt = .now
     }
 }
 

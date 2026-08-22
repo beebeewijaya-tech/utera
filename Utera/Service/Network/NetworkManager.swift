@@ -9,7 +9,7 @@ import Alamofire
 
 
 final class NetworkManager: Sendable {
-    nonisolated static let shared = NetworkManager()
+    static let shared = NetworkManager()
     let host = "https://jsonplaceholder.typicode.com"
     
     func get<T: Sendable & Decodable>() async throws -> T {
