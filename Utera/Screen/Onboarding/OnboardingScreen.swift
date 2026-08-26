@@ -34,4 +34,5 @@ struct OnboardingScreen: View {
 
 #Preview {
     OnboardingScreen()
+        .environment(OnboardingViewModel())
 }

@@ -26,6 +26,17 @@ struct FinishOnboard: View {
     ]
 
     
+    // MARK: - Function
+    func finishSetup() async {
+        let res = await notificationVM.saveNotification(context: modelContext)
+        if let err = notificationVM.errors.first {
+            snackbarVM.showMessage(err)
+            return
+        }
+        
+        onboardingVM.onboarding = res
+    }
+    
     var body: some View {
         VStack {
             Image(systemName: "bell.fill")
@@ -71,16 +82,7 @@ struct FinishOnboard: View {
             
             AppButton(label: "Finish Setup", style: .primary) {
                 Task {
-                    let res = await notificationVM.saveNotification(context: modelContext)
-                    if let err = notificationVM.errors.first {
-                        snackbarVM.showMessage(err)
-                        return
-                    }
-                    
-                    if res {
-                        // handle success
-                        onboardingVM.onboarding = true
-                    }
+                    await finishSetup()
                 }
             }
         }
@@ -99,5 +101,6 @@ struct FinishOnboard: View {
         FinishOnboard()
     }
     .environment(OnboardingViewModel())
+    .environment(SnackbarViewModel())
 }
 

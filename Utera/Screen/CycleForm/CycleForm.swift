@@ -34,6 +34,21 @@ struct CycleForm: View {
     // MARK: - Model
     @Environment(\.modelContext) private var modelContext
 
+    
+    // MARK: - Function
+    func submitForm() {
+        let res = cycleFormVM.submit(context: modelContext)
+        
+        if let err = cycleFormVM.errors.first {
+            snackbarVM.showMessage(err)
+            return
+        }
+        
+        if res {
+            onboardingVM.onboardingState = .finish
+        }
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -141,16 +156,7 @@ struct CycleForm: View {
 
                 
                 AppButton(label: "Continue", style: .primary) {
-                    let res = cycleFormVM.submit(context: modelContext)
-                    
-                    if let err = cycleFormVM.errors.first {
-                        snackbarVM.showMessage(err)
-                        return
-                    }
-                    
-                    if res {
-                        onboardingVM.onboardingState = .finish
-                    }
+                    submitForm()
                 }
             }
         }

@@ -156,7 +156,7 @@ struct ProfileScreen: View {
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .onAppear {
+        .task {
             profileVM.load(cycle: cycle, notification: notification)
         }
         .snackbar()
