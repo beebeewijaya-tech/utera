@@ -12,17 +12,19 @@ final class SnackbarViewModel {
     var message: String = ""
     var isShowing: Bool = false
     var type: SnackbarStyle = .danger
+    var dismissTask: Task<Void, Never>?
     
     func showMessage(_ message: String, type: SnackbarStyle = .danger) {
-        self.isShowing = false
+        dismissTask?.cancel()
         
+        self.isShowing = false
         self.message = message
         withAnimation(.spring(duration: 0.3)) {
             self.isShowing = true
             self.type = type
         }
         
-        Task {
+       dismissTask = Task {
             try? await Task.sleep(for: .seconds(1))
             self.isShowing = false
             self.message = ""
