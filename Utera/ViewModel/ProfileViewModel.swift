@@ -38,14 +38,15 @@ final class ProfileViewModel {
         if let cycle { context.delete(cycle) }
         if let notification { context.delete(notification) }
 
-        context.insert(CycleModel(
-            date: date,
-            avgCycle: avgCycle,
-            avgPeriod: avgPeriod,
-            cycleRegular: selectedCycleRegular,
-            trackingGoal: selectedTrackingGoal,
-            hasSubmitted: true
-        ))
+        context.insert(
+            CycleModel(
+                date: date,
+                avgCycle: avgCycle,
+                avgPeriod: avgPeriod,
+                cycleRegular: selectedCycleRegular,
+                trackingGoal: selectedTrackingGoal,
+            )
+        )
         context.insert(NotificationModel(days: Int(notificationDays) ?? 0))
 
         try? context.save()

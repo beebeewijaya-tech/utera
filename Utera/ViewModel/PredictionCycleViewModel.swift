@@ -20,7 +20,11 @@ final class PredictionCycleViewModel {
     var isLoading = false
     var err = ""
     var result: CyclePromptTask?
-    let llm = LLMManager<CyclePromptTask>() // initialize llm manager here
+    let llm: any ILLMManager<CyclePromptTask>
+    
+    init(llm: any ILLMManager<CyclePromptTask> = LLMManager<CyclePromptTask>()) {
+        self.llm = llm
+    }
 
     func generate(modelContext: ModelContext) async {
         guard isLoading == false else { return } // prevent double submit / race cond

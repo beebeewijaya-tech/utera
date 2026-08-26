@@ -81,10 +81,8 @@ final class CycleFormViewModel {
             avgPeriod: avgPeriod,
             cycleRegular: cycleRegular,
             trackingGoal: trackingGoal,
-            hasSubmitted: hasSubmitted
         )
         
-        print("cycleForm: \(cycleForm)")
         context.insert(cycleForm)
         return true
     }
