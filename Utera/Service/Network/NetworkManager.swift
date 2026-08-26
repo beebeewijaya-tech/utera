@@ -7,6 +7,10 @@
 import SwiftUI
 import Alamofire
 
+protocol INetworkManager<T> {
+    associatedtype T
+    func get<T: Sendable & Decodable>() async throws -> T
+}
 
 final class NetworkManager: Sendable {
     static let shared = NetworkManager()

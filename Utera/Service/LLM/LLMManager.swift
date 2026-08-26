@@ -9,6 +9,12 @@ import SwiftUI
 import FoundationModels
 
 
+protocol ILLMManager<T> {
+    associatedtype T
+    func generate(prompt: String) async throws -> T?
+}
+
+
 // LLMError is a way to describing error that happened
 enum LLMError: LocalizedError {
     case modelUnavailable
@@ -24,7 +30,7 @@ enum LLMError: LocalizedError {
     }
 }
 
-actor LLMManager<T: Sendable & Generable> {
+actor LLMManager<T: Sendable & Generable>: ILLMManager {
     var session: FoundationModels.LanguageModelSession?
     
     func initialize() throws -> LanguageModelSession? {
