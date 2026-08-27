@@ -23,6 +23,15 @@ struct ProfileScreen: View {
     private var cycle: CycleModel? { cycles.first }
     private var notification: NotificationModel? { notifications.first }
 
+    // MARK: - Function
+    func save() {
+        profileVM.save(
+            cycle: cycle,
+            notification: notification,
+            context: modelContext
+        )
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -147,9 +156,8 @@ struct ProfileScreen: View {
                 }
                 .padding(.bottom, 40)
 
-                AppButton(label: "Save Changes", style: .primary) {
-                    profileVM.save(cycle: cycle, notification: notification, context: modelContext)
-                    snackbarVM.showMessage("Changes saved!", type: .success)
+                AppButton(label: "Save Changes", style: .primary, isLoading: profileVM.state == .loading) {
+                    save()
                 }
             }
             .padding(.horizontal, 30)
@@ -158,6 +166,18 @@ struct ProfileScreen: View {
         }
         .task {
             profileVM.load(cycle: cycle, notification: notification)
+        }
+        .onChange(of: profileVM.state) { old, new in
+            if old != new {
+                switch new {
+                case .success:
+                    self.snackbarVM.showMessage("Changes saved", type: .success)
+                case .error(let error):
+                    self.snackbarVM.showMessage(error, type: .danger)
+                default:
+                    return
+                }
+            }
         }
         .snackbar()
     }

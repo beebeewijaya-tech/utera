@@ -22,7 +22,7 @@ struct ProfileViewModelTests {
         container = try ModelContainer(for: CycleModel.self, configurations: config)
     }
     
-    @Test("Testing load empty")
+    @Test("load empty")
     func loadEmpty() {
         let viewModel = ProfileViewModel()
         
@@ -35,7 +35,7 @@ struct ProfileViewModelTests {
         #expect(viewModel.notificationDays == "")
     }
     
-    @Test("Testing load not empty")
+    @Test("load not empty")
     func loadNotEmpty() {
         let viewModel = ProfileViewModel()
         
@@ -57,5 +57,23 @@ struct ProfileViewModelTests {
         #expect(viewModel.selectedCycleRegular == "Pretty regular")
         #expect(viewModel.selectedTrackingGoal == "General tracking")
         #expect(viewModel.notificationDays == "5")
+    }
+    
+    @Test("test save")
+    func save() throws {
+        let viewModel = ProfileViewModel()
+        let cycle = CycleModel(
+            date: .now,
+            avgCycle: 5,
+            avgPeriod: 5,
+            cycleRegular: "Pretty regular",
+            trackingGoal: "General tracking",
+            
+        )
+        let notification = NotificationModel(days: 5)
+
+        viewModel.save(cycle: cycle, notification: notification, context: container.mainContext)
+        
+        #expect(viewModel.state == .success)
     }
 }
