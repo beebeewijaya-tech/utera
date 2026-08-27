@@ -38,7 +38,7 @@ final class CycleFormViewModel {
     
     var avgPeriodError: String? {
         guard hasSubmitted else { return nil }
-        if avgCycle < 1 {
+        if avgPeriod < 1 {
             return "Average period need to be fill"
         }
         
