@@ -17,7 +17,13 @@ class CycleModel {
     var cycleRegular: String
     var trackingGoal: String
     
-    init(date: Date, avgCycle: Int, avgPeriod: Int, cycleRegular: String, trackingGoal: String) {
+    init(
+        date: Date,
+        avgCycle: Int,
+        avgPeriod: Int,
+        cycleRegular: String,
+        trackingGoal: String
+    ) {
         self.date = date
         self.avgCycle = avgCycle
         self.avgPeriod = avgPeriod
