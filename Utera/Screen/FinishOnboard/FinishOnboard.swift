@@ -24,11 +24,12 @@ struct FinishOnboard: View {
         Pill(label: "5"),
         Pill(label: "7")
     ]
-
     
     // MARK: - Function
     func finishSetup() async {
-        let res = await notificationVM.saveNotification(context: modelContext)
+        let res = await notificationVM.saveNotification(
+            context: modelContext
+        )
         if let err = notificationVM.errors.first {
             snackbarVM.showMessage(err)
             return
@@ -68,9 +69,12 @@ struct FinishOnboard: View {
                 
                 
                 HStack {
-                    ForEach(daysRemindMe) { i in
-                        AppPill(label: "\(i.label) days", style: i.label == notificationVM.days ? .active : .inactive) {
-                            notificationVM.days = i.label
+                    ForEach(daysRemindMe) { idx in
+                        AppPill(
+                            label: "\(idx.label) days",
+                            style: idx.label == notificationVM.days ? .active : .inactive
+                        ) {
+                            notificationVM.days = idx.label
                         }
                     }
                 }

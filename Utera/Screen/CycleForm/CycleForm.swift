@@ -120,9 +120,12 @@ struct CycleForm: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(cycleRegular.indices, id: \.self) { idx in
-                                let p = cycleRegular[idx]
-                                AppPill(label: p.label, style: cycleFormVM.cycleRegular == p.label ? .active : .inactive) {
-                                    cycleFormVM.cycleRegular = p.label
+                                let goal = cycleRegular[idx]
+                                AppPill(
+                                    label: goal.label,
+                                    style: cycleFormVM.cycleRegular == goal.label ? .active : .inactive
+                                ) {
+                                    cycleFormVM.cycleRegular = goal.label
                                 }
                             }
                         }
@@ -142,9 +145,12 @@ struct CycleForm: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(trackingGoal.indices, id: \.self) { idx in
-                                let p = trackingGoal[idx]
-                                AppPill(label: p.label, style: cycleFormVM.trackingGoal == p.label ? .active : .inactive) {
-                                    cycleFormVM.trackingGoal = p.label
+                                let goal = trackingGoal[idx]
+                                AppPill(
+                                    label: goal.label,
+                                    style: cycleFormVM.trackingGoal == goal.label ? .active : .inactive
+                                ) {
+                                    cycleFormVM.trackingGoal = goal.label
                                 }
                             }
                         }

@@ -24,85 +24,85 @@ struct CycleFormViewModelTests {
     
     @Test("rejecting non date")
     func rejectNonDate() {
-        let vm = CycleFormViewModel()
-        let res = vm.submit(context: container.mainContext)
+        let viewModel = CycleFormViewModel()
+        let res = viewModel.submit(context: container.mainContext)
         
-        vm.date = .distantFuture
+        viewModel.date = .distantFuture
         
-        #expect(vm.dateError != nil)
-        #expect(vm.hasSubmitted == true)
+        #expect(viewModel.dateError != nil)
+        #expect(viewModel.hasSubmitted == true)
         #expect(res == false)
     }
     
     @Test("rejecting avg cycle")
     func rejectAvgCycle() {
-        let vm = CycleFormViewModel()
+        let viewModel = CycleFormViewModel()
         
-        vm.date = .distantPast
+        viewModel.date = .distantPast
         
-        let res = vm.submit(context: container.mainContext)
-        #expect(vm.avgCycleError != nil)
-        #expect(vm.hasSubmitted == true)
+        let res = viewModel.submit(context: container.mainContext)
+        #expect(viewModel.avgCycleError != nil)
+        #expect(viewModel.hasSubmitted == true)
         #expect(res == false)
     }
     
     @Test("rejecting avg period")
     func rejectAvgPeriod() {
-        let vm = CycleFormViewModel()
+        let viewModel = CycleFormViewModel()
         
-        vm.date = .distantPast
-        vm.avgCycle = 1
+        viewModel.date = .distantPast
+        viewModel.avgCycle = 1
         
-        let res = vm.submit(context: container.mainContext)
+        let res = viewModel.submit(context: container.mainContext)
         
-        #expect(vm.avgPeriodError != nil)
-        #expect(vm.hasSubmitted == true)
+        #expect(viewModel.avgPeriodError != nil)
+        #expect(viewModel.hasSubmitted == true)
         #expect(res == false)
     }
     
     @Test("rejecting cycle regular")
     func rejectCycleRegular() {
-        let vm = CycleFormViewModel()
+        let viewModel = CycleFormViewModel()
         
-        vm.date = .distantPast
-        vm.avgCycle = 1
-        vm.avgPeriod = 1
+        viewModel.date = .distantPast
+        viewModel.avgCycle = 1
+        viewModel.avgPeriod = 1
         
-        let res = vm.submit(context: container.mainContext)
+        let res = viewModel.submit(context: container.mainContext)
         
-        #expect(vm.cycleRegularError != nil)
-        #expect(vm.hasSubmitted == true)
+        #expect(viewModel.cycleRegularError != nil)
+        #expect(viewModel.hasSubmitted == true)
         #expect(res == false)
     }
     
     @Test("rejecting tracking goal")
     func rejectTrackingGoal() {
-        let vm = CycleFormViewModel()
+        let viewModel = CycleFormViewModel()
         
-        vm.date = .distantPast
-        vm.avgCycle = 1
-        vm.avgPeriod = 1
-        vm.cycleRegular = "Pretty regular"
+        viewModel.date = .distantPast
+        viewModel.avgCycle = 1
+        viewModel.avgPeriod = 1
+        viewModel.cycleRegular = "Pretty regular"
         
-        let res = vm.submit(context: container.mainContext)
-        #expect(vm.trackingGoalError != nil)
-        #expect(vm.hasSubmitted == true)
+        let res = viewModel.submit(context: container.mainContext)
+        #expect(viewModel.trackingGoalError != nil)
+        #expect(viewModel.hasSubmitted == true)
         #expect(res == false)
     }
     
     
     @Test("success scenario")
     func successScenario() {
-        let vm = CycleFormViewModel()
+        let viewModel = CycleFormViewModel()
         
-        vm.date = .distantPast
-        vm.avgCycle = 1
-        vm.avgPeriod = 1
-        vm.cycleRegular = "Pretty regular"
-        vm.trackingGoal = "General tracking"
+        viewModel.date = .distantPast
+        viewModel.avgCycle = 1
+        viewModel.avgPeriod = 1
+        viewModel.cycleRegular = "Pretty regular"
+        viewModel.trackingGoal = "General tracking"
         
-        let res = vm.submit(context: container.mainContext)
-        #expect(vm.hasSubmitted == true)
+        let res = viewModel.submit(context: container.mainContext)
+        #expect(viewModel.hasSubmitted == true)
         #expect(res == true)
     }
 }

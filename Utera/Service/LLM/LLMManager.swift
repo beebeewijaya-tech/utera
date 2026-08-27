@@ -47,6 +47,9 @@ actor LLMManager<T: Sendable & Generable>: ILLMManager {
     
     func generate(prompt: String) async throws -> T? {
         let session = try initialize()
-        return try await session?.respond(to: prompt, generating: T.self).content
+        return try await session?.respond(
+            to: prompt,
+            generating: T.self
+        ).content
     }
 }

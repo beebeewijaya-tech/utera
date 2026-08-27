@@ -48,8 +48,8 @@ final class NotificationViewModel {
         
         try? await requestNotification()
         
-        let d = Int(days) ?? 0
-        let notification = NotificationModel(days: d)
+        let day = Int(days) ?? 0
+        let notification = NotificationModel(days: day)
         print("Notification \(notification.days)")
         context.insert(notification)
         
