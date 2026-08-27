@@ -43,6 +43,7 @@ enum ButtonStyle {
 struct AppButton: View {
     var label: String
     var style: ButtonStyle
+    var isLoading: Bool = false
     var action: () -> Void
     
     var body: some View {
@@ -56,13 +57,14 @@ struct AppButton: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 64)
-            .background(style.background)
+            .background(isLoading ? .gray.opacity(0.4) : style.background)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(style.foreground, lineWidth: style.borderWidth)
             }
         }
+        .disabled(isLoading)
     }
 }
 

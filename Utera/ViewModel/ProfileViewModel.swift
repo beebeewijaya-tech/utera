@@ -8,6 +8,14 @@
 import SwiftUI
 import SwiftData
 
+enum ProfileState: Equatable {
+    case error(String)
+    case success
+    case loading
+    case idle
+}
+
+
 @Observable
 final class ProfileViewModel {
     var date: Date = .now
@@ -16,10 +24,15 @@ final class ProfileViewModel {
     var selectedCycleRegular: String = ""
     var selectedTrackingGoal: String = ""
     var notificationDays: String = ""
+    var dismissTask: Task<Void, Never>?
 
+    // constant
     let cycleRegularOptions = ["Pretty regular", "Varies a lot", "Not sure"]
     let trackingGoalOptions = ["General tracking", "Trying to conceive", "Avoiding pregnancy"]
     let daysOptions = ["3", "5", "7"]
+
+    // screen state
+    var state: ProfileState = .idle
 
     func load(cycle: CycleModel?, notification: NotificationModel?) {
         if let cycle {
@@ -35,20 +48,35 @@ final class ProfileViewModel {
     }
 
     func save(cycle: CycleModel?, notification: NotificationModel?, context: ModelContext) {
-        if let cycle { context.delete(cycle) }
-        if let notification { context.delete(notification) }
+        dismissTask?.cancel()
+        state = .loading
+        
+        do {
+            if let cycle { context.delete(cycle) }
+            if let notification { context.delete(notification) }
 
-        context.insert(
-            CycleModel(
-                date: date,
-                avgCycle: avgCycle,
-                avgPeriod: avgPeriod,
-                cycleRegular: selectedCycleRegular,
-                trackingGoal: selectedTrackingGoal,
+            context.insert(
+                CycleModel(
+                    date: date,
+                    avgCycle: avgCycle,
+                    avgPeriod: avgPeriod,
+                    cycleRegular: selectedCycleRegular,
+                    trackingGoal: selectedTrackingGoal,
+                )
             )
-        )
-        context.insert(NotificationModel(days: Int(notificationDays) ?? 0))
+            context.insert(NotificationModel(days: Int(notificationDays) ?? 0))
 
-        try? context.save()
+            try context.save()
+            state = .success
+        } catch {
+            state = .error(error.localizedDescription)
+        }
+        
+        // save the task dismiss
+        // hence we can cancel it & control over it
+        dismissTask = Task {
+            try? await Task.sleep(for: .seconds(2))
+            state = .idle
+        }
     }
 }
