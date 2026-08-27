@@ -11,7 +11,18 @@
 		C8FABF2A2FEFA461002DE2C2 /* NewRelic in Frameworks */ = {isa = PBXBuildFile; productRef = C8FABF292FEFA461002DE2C2 /* NewRelic */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C81B3CA1303F491C00A45D7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C8869A4C2FEEB0D4006FF624 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C8869A532FEEB0D4006FF624;
+			remoteInfo = Utera;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		C81B3C9D303F491C00A45D7C /* UteraTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UteraTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8869A542FEEB0D4006FF624 /* YoUtera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YoUtera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -27,6 +38,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		C81B3C9E303F491C00A45D7C /* UteraTest */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UteraTest;
+			sourceTree = "<group>";
+		};
 		C8869A562FEEB0D4006FF624 /* Utera */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -38,6 +54,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C81B3C9A303F491C00A45D7C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8869A512FEEB0D4006FF624 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -54,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				C8869A562FEEB0D4006FF624 /* Utera */,
+				C81B3C9E303F491C00A45D7C /* UteraTest */,
 				C8869A552FEEB0D4006FF624 /* Products */,
 				C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */,
 			);
@@ -63,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				C8869A542FEEB0D4006FF624 /* YoUtera.app */,
+				C81B3C9D303F491C00A45D7C /* UteraTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C81B3C9C303F491C00A45D7C /* UteraTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C81B3CA3303F491C00A45D7C /* Build configuration list for PBXNativeTarget "UteraTest" */;
+			buildPhases = (
+				C81B3C99303F491C00A45D7C /* Sources */,
+				C81B3C9A303F491C00A45D7C /* Frameworks */,
+				C81B3C9B303F491C00A45D7C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C81B3CA2303F491C00A45D7C /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C81B3C9E303F491C00A45D7C /* UteraTest */,
+			);
+			name = UteraTest;
+			packageProductDependencies = (
+			);
+			productName = UteraTest;
+			productReference = C81B3C9D303F491C00A45D7C /* UteraTest.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C8869A532FEEB0D4006FF624 /* Utera */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C8869A5F2FEEB0D5006FF624 /* Build configuration list for PBXNativeTarget "Utera" */;
@@ -101,9 +149,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2650;
+				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					C81B3C9C303F491C00A45D7C = {
+						CreatedOnToolsVersion = 26.6;
+						LastSwiftMigration = 2660;
+						TestTargetID = C8869A532FEEB0D4006FF624;
+					};
 					C8869A532FEEB0D4006FF624 = {
 						CreatedOnToolsVersion = 26.5;
 					};
@@ -128,11 +181,19 @@
 			projectRoot = "";
 			targets = (
 				C8869A532FEEB0D4006FF624 /* Utera */,
+				C81B3C9C303F491C00A45D7C /* UteraTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C81B3C9B303F491C00A45D7C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8869A522FEEB0D4006FF624 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -143,6 +204,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C81B3C99303F491C00A45D7C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C8869A502FEEB0D4006FF624 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -152,7 +220,61 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C81B3CA2303F491C00A45D7C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C8869A532FEEB0D4006FF624 /* Utera */;
+			targetProxy = C81B3CA1303F491C00A45D7C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		C81B3CA4303F491C00A45D7C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HK5U3FU2AP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bee.swift.UteraTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YoUtera.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/YoUtera";
+			};
+			name = Debug;
+		};
+		C81B3CA5303F491C00A45D7C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HK5U3FU2AP;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bee.swift.UteraTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YoUtera.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/YoUtera";
+			};
+			name = Release;
+		};
 		C8869A5D2FEEB0D5006FF624 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C8FABF2E2FEFA6AB002DE2C2 /* Secrets.xcconfig */;
@@ -359,6 +481,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C81B3CA3303F491C00A45D7C /* Build configuration list for PBXNativeTarget "UteraTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C81B3CA4303F491C00A45D7C /* Debug */,
+				C81B3CA5303F491C00A45D7C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C8869A4F2FEEB0D4006FF624 /* Build configuration list for PBXProject "Utera" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
