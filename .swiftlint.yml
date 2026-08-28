@@ -1,2 +1,5 @@
 disabled_rules:
   - trailing_whitespace
+opt_in_rules:
+  - prefer_async_await 
+  - no_async_without_await
