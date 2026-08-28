@@ -11,6 +11,7 @@ import SwiftData
 
 @Observable
 final class NotificationViewModel {
+    var notificationManager: INotificationManager
     var days: String = ""
     var hasFinish: Bool = false
     var daysError: String? {
@@ -22,6 +23,11 @@ final class NotificationViewModel {
         
         return nil
     }
+    var permission: Bool = false
+    
+    init(notificationManager: INotificationManager = NotificationManager()) {
+        self.notificationManager = notificationManager
+    }
     
     var errors: [String] {
         [daysError].compactMap { $0 }
@@ -32,15 +38,13 @@ final class NotificationViewModel {
     }
     
     func requestNotification() async throws {
-        let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
-        print("Granted \(granted)")
+        permission = try await self.notificationManager.requestNotification()
+        print("Granted \(permission)")
     }
-    
     
     func sendNotification() {
         
     }
-    
     
     func saveNotification(context: ModelContext) async -> Bool {
         hasFinish = true
