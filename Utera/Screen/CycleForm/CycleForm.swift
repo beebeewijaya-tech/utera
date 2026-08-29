@@ -34,7 +34,6 @@ struct CycleForm: View {
     // MARK: - Model
     @Environment(\.modelContext) private var modelContext
 
-    
     // MARK: - Function
     func submitForm() {
         let res = cycleFormVM.submit(context: modelContext)
@@ -116,7 +115,6 @@ struct CycleForm: View {
                         .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
                     
-                    
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(cycleRegular.indices, id: \.self) { idx in
@@ -135,12 +133,10 @@ struct CycleForm: View {
                 }
                 .padding(.bottom, 12)
 
-                
                 VStack(alignment: .leading) {
                     Text("Tracking Goal")
                         .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
-                    
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
@@ -160,7 +156,6 @@ struct CycleForm: View {
                 }
                 .padding(.bottom, 40)
 
-                
                 AppButton(label: "Continue", style: .primary) {
                     submitForm()
                 }
@@ -172,7 +167,6 @@ struct CycleForm: View {
         .snackbar()
     }
 }
-
 
 #Preview {
     ZStack {

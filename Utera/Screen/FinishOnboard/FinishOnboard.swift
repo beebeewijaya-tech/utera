@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-
 struct FinishOnboard: View {
     // MARK: - ViewModel
     @Environment(OnboardingViewModel.self) private var onboardingVM
@@ -67,7 +66,6 @@ struct FinishOnboard: View {
                     .font(.caption)
                     .foregroundStyle(Color("TextSecondary"))
                 
-                
                 HStack {
                     ForEach(daysRemindMe) { idx in
                         AppPill(
@@ -96,7 +94,6 @@ struct FinishOnboard: View {
     }
 }
 
-
 #Preview {
     ZStack {
         Color("Background")
@@ -107,4 +104,3 @@ struct FinishOnboard: View {
     .environment(OnboardingViewModel())
     .environment(SnackbarViewModel())
 }
-

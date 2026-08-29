@@ -10,14 +10,26 @@ import SwiftData
 
 @main
 struct UteraApp: App {
+    private var container: ModelContainer
+    private var cycleStorage: ICycleStorage
+    
+    init() {
+        do {
+            self.container = try ModelContainer(
+                for: CycleModel.self, NotificationModel.self, CyclePredictModel.self
+            )
+            self.cycleStorage = CycleStorage(context: self.container.mainContext)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
-            MainScreen()
+            MainScreen(
+                cycleStorage: cycleStorage,
+            )
         }
-        .modelContainer(for: [
-            CycleModel.self,
-            NotificationModel.self,
-            CyclePredictModel.self
-        ])
+        .modelContainer(container)
     }
 }

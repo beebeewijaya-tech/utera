@@ -14,20 +14,14 @@ import Foundation
 @MainActor
 @Suite("PredictionCycleViewModel tests")
 struct PredictionCycleViewModelTests {
-    var container: ModelContainer
-    
-    init() throws {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        container = try ModelContainer(for: CycleModel.self, configurations: config)
-    }
+    var storage = FakeCycleStorage()
     
     @Test("testing load function when empty")
     func loadWhenEmpty() async throws {
         let llm: FakeLLMManager<CyclePromptTask> = FakeLLMManager()
-        let viewModel = PredictionCycleViewModel(llm: llm)
+        let viewModel = PredictionCycleViewModel(llm: llm, cycleStorage: storage)
         
         await viewModel.load(
-            modelContext: container.mainContext,
             cycle: CycleModel(
                 date: .distantPast,
                 avgCycle: 5,
@@ -48,7 +42,7 @@ struct PredictionCycleViewModelTests {
     @Test("testing load function when exist")
     func loadWhenExist() async throws {
         let llm: FakeLLMManager<CyclePromptTask> = FakeLLMManager()
-        let viewModel = PredictionCycleViewModel(llm: llm)
+        let viewModel = PredictionCycleViewModel(llm: llm, cycleStorage: storage)
         
         let cyclePredicted = CyclePredictModel(
             fertileWindowStart: "exist-date",
@@ -57,7 +51,6 @@ struct PredictionCycleViewModelTests {
             advise: "Existing data"
         )
         await viewModel.load(
-            modelContext: container.mainContext,
             cycle: CycleModel(
                 date: .distantPast,
                 avgCycle: 5,
@@ -78,9 +71,9 @@ struct PredictionCycleViewModelTests {
     @Test("testing generate function")
     func generate() async throws {
         let llm: FakeLLMManager<CyclePromptTask> = FakeLLMManager()
-        let viewModel = PredictionCycleViewModel(llm: llm)
+        let viewModel = PredictionCycleViewModel(llm: llm, cycleStorage: storage)
         
-        await viewModel.generate(modelContext: container.mainContext)
+        await viewModel.generate()
         #expect(llm.generateCalled == 1)
         #expect(llm.cycleForm.fertileWindowStart == viewModel.result?.fertileWindowStart)
         #expect(llm.cycleForm.fertileWindowEnd == viewModel.result?.fertileWindowEnd)

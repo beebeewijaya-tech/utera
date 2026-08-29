@@ -10,7 +10,6 @@ import SwiftData
 
 @testable import YoUtera
 
-
 @MainActor
 @Suite("Notification tests")
 struct NotificationViewModelTests {
@@ -20,7 +19,6 @@ struct NotificationViewModelTests {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         container = try ModelContainer(for: NotificationModel.self, configurations: config)
     }
-    
     
     @Test("requestNotification", arguments: [
         (false),
@@ -38,7 +36,6 @@ struct NotificationViewModelTests {
         #expect(notificationViewModel.permission == permission)
         #expect(notificationManager.requestNotificationCalled == 1)
     }
-    
     
     @Test("save notification failed")
     func saveNotificationFailed() async throws {

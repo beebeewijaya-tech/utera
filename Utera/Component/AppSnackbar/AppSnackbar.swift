@@ -27,7 +27,6 @@ enum SnackbarStyle {
     }
 }
 
-
 struct AppSnackbar: View {
     var message: String
     var style: SnackbarStyle
@@ -35,7 +34,6 @@ struct AppSnackbar: View {
     // MARK: - ViewModel
     @Environment(SnackbarViewModel.self) private var snackbarVM
 
-    
     var body: some View {
         HStack {
             Text(message)
@@ -60,7 +58,6 @@ struct AppSnackbar: View {
     }
 }
 
-
 struct SnackbarModifier: ViewModifier {
     @Environment(SnackbarViewModel.self) private var snackbarVM
     
@@ -78,7 +75,6 @@ extension View {
         modifier(SnackbarModifier())
     }
 }
-
 
 #Preview {
     AppSnackbar(message: "Error when fetching something", style: .danger)

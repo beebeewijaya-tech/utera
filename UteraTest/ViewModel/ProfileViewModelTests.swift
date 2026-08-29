@@ -11,7 +11,6 @@ import Foundation
 
 @testable import YoUtera
 
-
 @MainActor
 @Suite("Profile View Model Tests")
 struct ProfileViewModelTests {

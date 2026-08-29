@@ -11,7 +11,6 @@ struct GetStartedScreen: View {
     // MARK: - ViewModel
     @Environment(OnboardingViewModel.self) private var onboardingVM
     
-    
     var body: some View {
         VStack {
             Spacer()
@@ -24,7 +23,6 @@ struct GetStartedScreen: View {
                 .font(.title)
                 .bold()
                 .padding(.bottom, 12)
-            
             
             Text("Understand your cycle quietly, accurately, and entirely on your own device.")
                 .font(.callout)
@@ -51,7 +49,6 @@ struct GetStartedScreen: View {
         .padding(.vertical, 12)
     }
 }
-
 
 #Preview {
     ZStack {

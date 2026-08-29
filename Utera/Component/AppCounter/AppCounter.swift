@@ -33,7 +33,6 @@ struct AppCounter: View {
                     .bold()
                     .foregroundStyle(Color("TextPrimary"))
                 
-                
                 Text("\(label)")
                     .font(.callout)
                     .foregroundStyle(Color("TextSecondary"))
@@ -56,7 +55,6 @@ struct AppCounter: View {
         }
     }
 }
-
 
 #Preview {
     AppCounter(value: .constant(0), label: "d")
