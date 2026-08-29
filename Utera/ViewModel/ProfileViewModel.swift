@@ -32,6 +32,16 @@ final class ProfileViewModel {
 
     // screen state
     var state: ProfileState = .idle
+    
+    // props
+    var cycleStorage: ICycleStorage
+    var notificationStorage: INotificationStorage
+    
+    init(cycleStorage: ICycleStorage, notificationStorage: INotificationStorage) {
+        self.cycleStorage = cycleStorage
+        self.notificationStorage = notificationStorage
+    }
+    
 
     func load(cycle: CycleModel?, notification: NotificationModel?) {
         if let cycle {
@@ -46,26 +56,26 @@ final class ProfileViewModel {
         }
     }
 
-    func save(cycle: CycleModel?, notification: NotificationModel?, context: ModelContext) {
+    func save(cycle: CycleModel?, notification: NotificationModel?) {
         dismissTask?.cancel()
         state = .loading
         
         do {
-            if let cycle { context.delete(cycle) }
-            if let notification { context.delete(notification) }
+            if let cycle { try cycleStorage.delete(payload: cycle) }
+            if let notification { try notificationStorage.delete(payload: notification) }
 
-            context.insert(
-                CycleModel(
-                    date: date,
-                    avgCycle: avgCycle,
-                    avgPeriod: avgPeriod,
-                    cycleRegular: selectedCycleRegular,
-                    trackingGoal: selectedTrackingGoal,
-                )
+            let cyclePayload = CycleModel(
+                date: date,
+                avgCycle: avgCycle,
+                avgPeriod: avgPeriod,
+                cycleRegular: selectedCycleRegular,
+                trackingGoal: selectedTrackingGoal,
             )
-            context.insert(NotificationModel(days: Int(notificationDays) ?? 0))
+            let notificationPayload = NotificationModel(days: Int(notificationDays) ?? 0)
+            
+            try cycleStorage.save(payload: cyclePayload)
+            try notificationStorage.save(payload: notificationPayload)
 
-            try context.save()
             state = .success
         } catch {
             state = .error(error.localizedDescription)

@@ -18,6 +18,7 @@ struct MainScreen: View {
 
     var cyclePromptStorage: ICyclePromptStorage
     var cycleStorage: ICycleStorage
+    var notificationStorage: INotificationStorage
 
     var body: some View {
         VStack {
@@ -34,7 +35,10 @@ struct MainScreen: View {
                     }
 
                     Tab("Profile", systemImage: "person.fill") {
-                        ProfileScreen()
+                        ProfileScreen(
+                            cycleStorage: cycleStorage,
+                            notificationStorage: notificationStorage
+                        )
                     }
                 }
                 .tint(Color("Primary"))
@@ -53,6 +57,9 @@ struct MainScreen: View {
             context: PreviewContainer.shared.mainContext
         ),
         cycleStorage: CycleStorage(
+            context: PreviewContainer.shared.mainContext
+        ),
+        notificationStorage: NotificationStorage(
             context: PreviewContainer.shared.mainContext
         )
     )

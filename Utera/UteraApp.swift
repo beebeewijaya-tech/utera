@@ -13,6 +13,7 @@ struct UteraApp: App {
     private var container: ModelContainer
     private var cyclePromptStorage: ICyclePromptStorage
     private var cycleStorage: ICycleStorage
+    private var notificationStorage: INotificationStorage
 
     init() {
         do {
@@ -21,6 +22,7 @@ struct UteraApp: App {
             )
             cyclePromptStorage = CyclePromptStorage(context: container.mainContext)
             cycleStorage = CycleStorage(context: container.mainContext)
+            notificationStorage = NotificationStorage(context: container.mainContext)
         } catch {
             fatalError(error.localizedDescription)
         }
@@ -30,7 +32,8 @@ struct UteraApp: App {
         WindowGroup {
             MainScreen(
                 cyclePromptStorage: cyclePromptStorage,
-                cycleStorage: cycleStorage
+                cycleStorage: cycleStorage,
+                notificationStorage: notificationStorage
             )
         }
         .modelContainer(container)

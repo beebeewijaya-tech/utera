@@ -18,8 +18,9 @@ struct ProfileScreen: View {
     @Environment(SnackbarViewModel.self) private var snackbarVM
 
     // MARK: - ViewModel
-    @State private var profileVM = ProfileViewModel()
-
+    @State private var profileVM: ProfileViewModel
+    
+    // MARK: - Getter
     private var cycle: CycleModel? { cycles.first }
     private var notification: NotificationModel? { notifications.first }
 
@@ -28,8 +29,13 @@ struct ProfileScreen: View {
         profileVM.save(
             cycle: cycle,
             notification: notification,
-            context: modelContext
         )
+    }
+    
+    init(cycleStorage: ICycleStorage, notificationStorage: INotificationStorage) {
+        self._profileVM = State(initialValue: ProfileViewModel(
+            cycleStorage: cycleStorage, notificationStorage: notificationStorage
+        ))
     }
     
     var body: some View {
@@ -187,7 +193,10 @@ struct ProfileScreen: View {
         Color("Background")
             .ignoresSafeArea(.all)
 
-        ProfileScreen()
+        ProfileScreen(
+            cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext),
+            notificationStorage: NotificationStorage(context: PreviewContainer.shared.mainContext)
+        )
     }
     .environment(SnackbarViewModel())
     .modelContainer(for: [CycleModel.self, NotificationModel.self], inMemory: true)
