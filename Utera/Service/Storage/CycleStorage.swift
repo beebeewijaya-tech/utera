@@ -2,33 +2,25 @@
 //  CycleStorage.swift
 //  Utera
 //
-//  Created by Bee Wijaya on 29/08/26.
+//  Created by Bee Wijaya on 30/08/26.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 protocol ICycleStorage {
-    func save(result: CyclePromptTask) throws
+    func save(payload: CycleModel) throws
 }
 
 class CycleStorage: ICycleStorage {
     var context: ModelContext
-    
+
     init(context: ModelContext) {
         self.context = context
     }
-    
-    func save(result: CyclePromptTask) throws {
-        context.insert(
-            CyclePredictModel(
-                fertileWindowStart: result.fertileWindowStart,
-                fertileWindowEnd: result.fertileWindowEnd,
-                nextPeriodDate: result.nextPeriodDate,
-                advise: result.advise
-            )
-        )
-        
+
+    func save(payload: CycleModel) throws {
+        context.insert(payload)
         try context.save()
     }
 }

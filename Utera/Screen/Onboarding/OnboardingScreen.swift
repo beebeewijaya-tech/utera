@@ -1,27 +1,33 @@
 //
-//  Onboarding.swift
+//  OnboardingScreen.swift
 //  Utera
 //
 //  Created by Bee Wijaya on 26/06/26.
 //
 
+import SwiftData
 import SwiftUI
 
 struct OnboardingScreen: View {
     // MARK: - ViewModel
+
     @Environment(OnboardingViewModel.self) private var onboardingVM
+
+    // MARK: - Props
+
+    var cycleStorage: ICycleStorage
 
     var body: some View {
         ZStack {
             Color("Background")
                 .ignoresSafeArea(.all)
-            
+
             switch onboardingVM.onboardingState {
             case .getStarted:
                 GetStartedScreen()
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             case .cycleForm:
-                CycleForm()
+                CycleForm(cycleStorage: cycleStorage)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             case .finish:
                 FinishOnboard()
@@ -33,6 +39,8 @@ struct OnboardingScreen: View {
 }
 
 #Preview {
-    OnboardingScreen()
-        .environment(OnboardingViewModel())
+    OnboardingScreen(
+        cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext)
+    )
+    .environment(OnboardingViewModel())
 }

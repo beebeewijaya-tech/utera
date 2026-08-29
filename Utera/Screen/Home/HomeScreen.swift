@@ -5,38 +5,44 @@
 //  Created by Bee Wijaya on 27/06/26.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct HomeScreen: View {
     // MARK: - Storage
+
     @Environment(\.modelContext) private var modelContext: ModelContext
-    
+
     @Query private var cycles: [CycleModel]
     @Query private var cyclesPredicted: [CyclePredictModel]
-    
+
     private var cycle: CycleModel? {
         cycles.first
     }
+
     private var cyclePredicted: CyclePredictModel? {
         cyclesPredicted.first
     }
-    
+
     // MARK: - State
-    @State private var currentDate: Date = Date.now
-    
+
+    @State private var currentDate: Date = .now
+
     // MARK: - ViewModel
+
     @State private var predictionCycleVM: PredictionCycleViewModel
 
     // MARK: - Properties
+
     var nextPeriodFormatted: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         guard let date = formatter.date(from: predictionCycleVM.result?.nextPeriodDate ?? "") else { return "" }
         return date.formatted(.dateTime.month(.abbreviated).day())
     }
-    
+
     // MARK: - Function
+
     func resync() async {
         cyclesPredicted.forEach { modelContext.delete($0) }
         predictionCycleVM.result = nil
@@ -44,11 +50,12 @@ struct HomeScreen: View {
         // will call generate
         await predictionCycleVM.generate()
     }
-    
+
     // MARK: - Init
-    init(cycleStorage: ICycleStorage) {
-        self._predictionCycleVM = State(initialValue: PredictionCycleViewModel(
-            cycleStorage: cycleStorage,
+
+    init(cyclePromptStorage: ICyclePromptStorage) {
+        _predictionCycleVM = State(initialValue: PredictionCycleViewModel(
+            cyclePromptStorage: cyclePromptStorage
         ))
     }
 
@@ -59,15 +66,15 @@ struct HomeScreen: View {
                     Text(currentDate, format: .dateTime.weekday(.wide).month(.abbreviated).day())
                         .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
-                    
+
                     Text("Hi, Maya")
                         .font(.title)
                         .bold()
                         .foregroundStyle(Color("TextPrimary"))
                 }
-                
+
                 Spacer()
-                
+
                 Image(systemName: "bell")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -80,11 +87,11 @@ struct HomeScreen: View {
                     .shadow(color: .black.opacity(0.1), radius: 1)
             }
             .padding(.bottom, 30)
-                        
+
             if !predictionCycleVM.isLoading {
                 FertileWindow(currentDate: currentDate, cyclePredicted: predictionCycleVM.result)
                     .padding(.bottom, 20)
-                
+
                 VStack {
                     Button {
                         Task {
@@ -118,7 +125,7 @@ struct HomeScreen: View {
     ZStack {
         Color("Background")
             .ignoresSafeArea(.all)
-        
-        HomeScreen(cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext))
+
+        HomeScreen(cyclePromptStorage: CyclePromptStorage(context: PreviewContainer.shared.mainContext))
     }
 }

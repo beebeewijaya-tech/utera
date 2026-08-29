@@ -5,15 +5,18 @@
 //  Created by Bee Wijaya on 26/06/26.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct MainScreen: View {
     // MARK: - ViewModel
-    @State private var snackbarVM: SnackbarViewModel = SnackbarViewModel()
+
+    @State private var snackbarVM: SnackbarViewModel = .init()
     @State private var onboardingVM = OnboardingViewModel()
-    
+
     // MARK: - Propertes
+
+    var cyclePromptStorage: ICyclePromptStorage
     var cycleStorage: ICycleStorage
 
     var body: some View {
@@ -22,10 +25,10 @@ struct MainScreen: View {
                 TabView {
                     Tab("Home", systemImage: "house.fill") {
                         HomeScreen(
-                            cycleStorage: cycleStorage,
+                            cyclePromptStorage: cyclePromptStorage
                         )
                     }
-                    
+
                     Tab("Calendar", systemImage: "calendar") {
                         CalendarScreen()
                     }
@@ -36,7 +39,7 @@ struct MainScreen: View {
                 }
                 .tint(Color("Primary"))
             } else {
-                OnboardingScreen()
+                OnboardingScreen(cycleStorage: cycleStorage)
             }
         }
         .environment(onboardingVM)
@@ -46,6 +49,11 @@ struct MainScreen: View {
 
 #Preview {
     MainScreen(
-        cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext)
+        cyclePromptStorage: CyclePromptStorage(
+            context: PreviewContainer.shared.mainContext
+        ),
+        cycleStorage: CycleStorage(
+            context: PreviewContainer.shared.mainContext
+        )
     )
 }
