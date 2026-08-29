@@ -25,8 +25,16 @@ final class NotificationViewModel {
     }
     var permission: Bool = false
     
-    init(notificationManager: INotificationManager = NotificationManager()) {
+    
+    // MARK: - props
+    var notificationStorage: INotificationStorage
+    
+    init(
+        notificationManager: INotificationManager = NotificationManager(),
+        notificationStorage: INotificationStorage
+    ) {
         self.notificationManager = notificationManager
+        self.notificationStorage = notificationStorage
     }
     
     var errors: [String] {
@@ -46,17 +54,21 @@ final class NotificationViewModel {
         
     }
     
-    func saveNotification(context: ModelContext) async -> Bool {
+    func saveNotification() async -> Bool {
         hasFinish = true
         guard isFormValid else { return false }
         
-        try? await requestNotification()
-        
-        let day = Int(days) ?? 0
-        let notification = NotificationModel(days: day)
-        print("Notification \(notification.days)")
-        context.insert(notification)
-        
-        return true
+        do {
+            try await requestNotification()
+            let day = Int(days) ?? 0
+            let notification = NotificationModel(days: day)
+            print("Notification \(notification.days)")
+
+            try notificationStorage.save(payload: notification)
+            return true
+        } catch {
+            print("Error when save notification \(error.localizedDescription)")
+            return false
+        }
     }
 }

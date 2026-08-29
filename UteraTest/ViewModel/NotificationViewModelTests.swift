@@ -13,21 +13,16 @@ import SwiftData
 @MainActor
 @Suite("Notification tests")
 struct NotificationViewModelTests {
-    var container: ModelContainer
-    
-    init() throws {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        container = try ModelContainer(for: NotificationModel.self, configurations: config)
-    }
-    
     @Test("requestNotification", arguments: [
         (false),
         (true)
     ])
     func requestNotificsation(permission: Bool) async throws {
         let notificationManager = FakeNotificationManager()
+        let notificationStorage = FakeNotificationStorage()
         let notificationViewModel = NotificationViewModel(
-            notificationManager: notificationManager
+            notificationManager: notificationManager,
+            notificationStorage: notificationStorage
         )
         notificationManager.permission = permission
         
@@ -39,26 +34,34 @@ struct NotificationViewModelTests {
     
     @Test("save notification failed")
     func saveNotificationFailed() async throws {
+        let notificationManager = FakeNotificationManager()
+        let notificationStorage = FakeNotificationStorage()
         let notificationViewModel = NotificationViewModel(
-            notificationManager: FakeNotificationManager()
+            notificationManager: notificationManager,
+            notificationStorage: notificationStorage
         )
         
-        let notification = await notificationViewModel.saveNotification(context: container.mainContext)
+        let notification = await notificationViewModel.saveNotification()
         
         #expect(notificationViewModel.hasFinish == true)
         #expect(notification == false)
+        #expect(notificationStorage.saveCalled == 0)
     }
     
     @Test("save notification success")
     func saveNotificationSuccess() async throws {
+        let notificationManager = FakeNotificationManager()
+        let notificationStorage = FakeNotificationStorage()
         let notificationViewModel = NotificationViewModel(
-            notificationManager: FakeNotificationManager()
+            notificationManager: notificationManager,
+            notificationStorage: notificationStorage
         )
         
         notificationViewModel.days = "5"
-        let notification = await notificationViewModel.saveNotification(context: container.mainContext)
+        let notification = await notificationViewModel.saveNotification()
         
         #expect(notificationViewModel.hasFinish == true)
         #expect(notification == true)
+        #expect(notificationStorage.saveCalled == 1)
     }
 }
