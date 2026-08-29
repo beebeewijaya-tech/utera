@@ -22,8 +22,28 @@ class FakeCycleStorage: ICycleStorage {
     // MARK: - spy
 
     var saveCalled: Int = 0
+    var deleteCalled: Int = 0
 
-    func save(payload _: CycleModel) throws {
+    func save(payload: CycleModel) throws {
         saveCalled += 1
+    }
+    
+    func delete(payload: CycleModel) throws {
+        deleteCalled += 1
+    }
+}
+
+class FakeNotificationStorage: INotificationStorage {
+    // MARK: - spy
+
+    var saveCalled: Int = 0
+    var deleteCalled: Int = 0
+
+    func save(payload: NotificationModel) throws {
+        saveCalled += 1
+    }
+    
+    func delete(payload: NotificationModel) throws {
+        deleteCalled += 1
     }
 }

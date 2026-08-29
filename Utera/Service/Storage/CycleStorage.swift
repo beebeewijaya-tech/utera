@@ -10,6 +10,7 @@ import SwiftUI
 
 protocol ICycleStorage {
     func save(payload: CycleModel) throws
+    func delete(payload: CycleModel) throws
 }
 
 class CycleStorage: ICycleStorage {
@@ -22,5 +23,9 @@ class CycleStorage: ICycleStorage {
     func save(payload: CycleModel) throws {
         context.insert(payload)
         try context.save()
+    }
+    
+    func delete(payload: CycleModel) throws {
+        context.delete(payload)
     }
 }

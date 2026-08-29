@@ -14,16 +14,14 @@ import Foundation
 @MainActor
 @Suite("Profile View Model Tests")
 struct ProfileViewModelTests {
-    var container: ModelContainer
-    
-    init() throws {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        container = try ModelContainer(for: CycleModel.self, configurations: config)
-    }
-    
     @Test("load empty")
     func loadEmpty() {
-        let viewModel = ProfileViewModel()
+        let cycleStorage = FakeCycleStorage()
+        let notificationStorage = FakeNotificationStorage()
+        let viewModel = ProfileViewModel(
+            cycleStorage: cycleStorage,
+            notificationStorage: notificationStorage
+        )
         
         viewModel.load(cycle: nil, notification: nil)
         
@@ -36,7 +34,12 @@ struct ProfileViewModelTests {
     
     @Test("load not empty")
     func loadNotEmpty() {
-        let viewModel = ProfileViewModel()
+        let cycleStorage = FakeCycleStorage()
+        let notificationStorage = FakeNotificationStorage()
+        let viewModel = ProfileViewModel(
+            cycleStorage: cycleStorage,
+            notificationStorage: notificationStorage
+        )
         
         let cycle = CycleModel(
             date: .now,
@@ -60,7 +63,12 @@ struct ProfileViewModelTests {
     
     @Test("test save")
     func save() throws {
-        let viewModel = ProfileViewModel()
+        let cycleStorage = FakeCycleStorage()
+        let notificationStorage = FakeNotificationStorage()
+        let viewModel = ProfileViewModel(
+            cycleStorage: cycleStorage,
+            notificationStorage: notificationStorage
+        )
         let cycle = CycleModel(
             date: .now,
             avgCycle: 5,
@@ -71,8 +79,12 @@ struct ProfileViewModelTests {
         )
         let notification = NotificationModel(days: 5)
 
-        viewModel.save(cycle: cycle, notification: notification, context: container.mainContext)
+        viewModel.save(cycle: cycle, notification: notification)
         
         #expect(viewModel.state == .success)
+        #expect(notificationStorage.saveCalled == 1)
+        #expect(notificationStorage.deleteCalled == 1)
+        #expect(cycleStorage.saveCalled == 1)
+        #expect(cycleStorage.deleteCalled == 1)
     }
 }
