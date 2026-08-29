@@ -12,7 +12,7 @@ struct FinishOnboard: View {
     // MARK: - ViewModel
     @Environment(OnboardingViewModel.self) private var onboardingVM
     @Environment(SnackbarViewModel.self) private var snackbarVM
-    @State private var notificationVM = NotificationViewModel()
+    @State private var notificationVM: NotificationViewModel
     
     // MARK: - Storage
     @Environment(\.modelContext) private var modelContext
@@ -26,15 +26,19 @@ struct FinishOnboard: View {
     
     // MARK: - Function
     func finishSetup() async {
-        let res = await notificationVM.saveNotification(
-            context: modelContext
-        )
+        let res = await notificationVM.saveNotification()
         if let err = notificationVM.errors.first {
             snackbarVM.showMessage(err)
             return
         }
         
         onboardingVM.onboarding = res
+    }
+    
+    
+    // MARK: - Init
+    init(notificationStorage: INotificationStorage) {
+        self._notificationVM = State(initialValue: NotificationViewModel(notificationStorage: notificationStorage))
     }
     
     var body: some View {
@@ -99,7 +103,9 @@ struct FinishOnboard: View {
         Color("Background")
             .ignoresSafeArea(.all)
         
-        FinishOnboard()
+        FinishOnboard(
+            notificationStorage: NotificationStorage(context: PreviewContainer.shared.mainContext)
+        )
     }
     .environment(OnboardingViewModel())
     .environment(SnackbarViewModel())

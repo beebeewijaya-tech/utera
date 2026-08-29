@@ -43,7 +43,10 @@ struct MainScreen: View {
                 }
                 .tint(Color("Primary"))
             } else {
-                OnboardingScreen(cycleStorage: cycleStorage)
+                OnboardingScreen(
+                    cycleStorage: cycleStorage,
+                    notificationStorage: notificationStorage
+                )
             }
         }
         .environment(onboardingVM)

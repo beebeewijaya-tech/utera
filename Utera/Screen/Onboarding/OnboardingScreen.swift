@@ -10,12 +10,11 @@ import SwiftUI
 
 struct OnboardingScreen: View {
     // MARK: - ViewModel
-
     @Environment(OnboardingViewModel.self) private var onboardingVM
 
     // MARK: - Props
-
     var cycleStorage: ICycleStorage
+    var notificationStorage: INotificationStorage
 
     var body: some View {
         ZStack {
@@ -30,7 +29,7 @@ struct OnboardingScreen: View {
                 CycleForm(cycleStorage: cycleStorage)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             case .finish:
-                FinishOnboard()
+                FinishOnboard(notificationStorage: notificationStorage)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
             }
         }
@@ -40,7 +39,8 @@ struct OnboardingScreen: View {
 
 #Preview {
     OnboardingScreen(
-        cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext)
+        cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext),
+        notificationStorage: NotificationStorage(context: PreviewContainer.shared.mainContext)
     )
     .environment(OnboardingViewModel())
 }
