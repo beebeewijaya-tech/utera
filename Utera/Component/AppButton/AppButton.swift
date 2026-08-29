@@ -10,7 +10,6 @@ import SwiftUI
 enum ButtonStyle {
     case primary, secondary
     
-    
     var background: Color {
         switch self {
         case .primary:
@@ -28,7 +27,6 @@ enum ButtonStyle {
             return Color("Primary")
         }
     }
-    
     
     var borderWidth: CGFloat {
         switch self {
@@ -67,7 +65,6 @@ struct AppButton: View {
         .disabled(isLoading)
     }
 }
-
 
 #Preview {
     AppButton(label: "Get Started", style: .primary) {

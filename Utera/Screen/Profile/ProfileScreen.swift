@@ -144,7 +144,6 @@ struct ProfileScreen: View {
                             .foregroundStyle(Color("TextSecondary"))
                             .padding(.bottom, 12)
                         
-                        
                         HStack(spacing: 8) {
                             ForEach(profileVM.daysOptions, id: \.self) { option in
                                 AppPill(label: "\(option)d", style: profileVM.notificationDays == option ? .active : .inactive) {

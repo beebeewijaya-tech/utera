@@ -56,7 +56,7 @@ final class CycleFormViewModel {
     
     var trackingGoalError: String? {
         guard hasSubmitted else { return nil }
-        if trackingGoal == ""{
+        if trackingGoal == "" {
             return "Please select the tracking goal"
         }
         

@@ -9,9 +9,9 @@ import SwiftUI
 import FoundationModels
 import SwiftData
 
-
 @Observable
 final class PredictionCycleViewModel {
+    // MARK: - State
     var date: Date = .now
     var avgCycle: Int = 0
     var avgPeriod: Int = 0
@@ -20,13 +20,20 @@ final class PredictionCycleViewModel {
     var isLoading = false
     var err = ""
     var result: CyclePromptTask?
-    let llm: any ILLMManager<CyclePromptTask>
     
-    init(llm: any ILLMManager<CyclePromptTask> = LLMManager<CyclePromptTask>()) {
+    // MARK: - Props
+    var llm: any ILLMManager<CyclePromptTask>
+    var cycleStorage: ICycleStorage
+    
+    init(
+        llm: any ILLMManager<CyclePromptTask> = LLMManager<CyclePromptTask>(),
+        cycleStorage: ICycleStorage
+    ) {
         self.llm = llm
+        self.cycleStorage = cycleStorage
     }
 
-    func generate(modelContext: ModelContext) async {
+    func generate() async {
         guard isLoading == false else { return } // prevent double submit / race cond
         isLoading = true
         defer { isLoading = false } // ensure to quit isLoading if function done
@@ -48,15 +55,15 @@ final class PredictionCycleViewModel {
                   - Fertile window is 5 days before ovulation through ovulation day
             """
             result = try await llm.generate(prompt: prompt)
-            if result != nil {
-                modelContext.insert(CyclePredictModel(fertileWindowStart: result!.fertileWindowStart, fertileWindowEnd: result!.fertileWindowEnd, nextPeriodDate: result!.nextPeriodDate, advise: result!.advise))
+            if let result {
+                try self.cycleStorage.save(result: result)
             }
         } catch {
             err = error.localizedDescription
         }
     }
     
-    func load(modelContext: ModelContext, cycle: CycleModel?, cyclePredicted: CyclePredictModel?) async {
+    func load(cycle: CycleModel?, cyclePredicted: CyclePredictModel?) async {
         guard let cycle else { return }
         
         // cycle
@@ -68,7 +75,7 @@ final class PredictionCycleViewModel {
         
         guard let cyclePredicted else {
             // not found will generate the prompt
-            await generate(modelContext: modelContext)
+            await generate()
             return
         }
 

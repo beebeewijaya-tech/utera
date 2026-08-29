@@ -9,7 +9,6 @@ import SwiftUI
 import FoundationModels
 import SwiftData
 
-
 @Model
 class CyclePredictModel {
     var fertileWindowStart: String
@@ -31,7 +30,6 @@ class CyclePredictModel {
         self.createdAt = .now
     }
 }
-
 
 @Generable
 struct CyclePromptTask {

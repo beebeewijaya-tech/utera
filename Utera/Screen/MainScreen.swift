@@ -6,26 +6,30 @@
 //
 
 import SwiftUI
-
+import SwiftData
 
 struct MainScreen: View {
     // MARK: - ViewModel
     @State private var snackbarVM: SnackbarViewModel = SnackbarViewModel()
     @State private var onboardingVM = OnboardingViewModel()
+    
+    // MARK: - Propertes
+    var cycleStorage: ICycleStorage
 
     var body: some View {
         VStack {
             if onboardingVM.onboarding {
                 TabView {
                     Tab("Home", systemImage: "house.fill") {
-                        HomeScreen()
+                        HomeScreen(
+                            cycleStorage: cycleStorage,
+                        )
                     }
                     
                     Tab("Calendar", systemImage: "calendar") {
-//                        CalendarScreen()
+                        CalendarScreen()
                     }
 
-                    
                     Tab("Profile", systemImage: "person.fill") {
                         ProfileScreen()
                     }
@@ -40,7 +44,8 @@ struct MainScreen: View {
     }
 }
 
-
 #Preview {
-    MainScreen()
+    MainScreen(
+        cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext)
+    )
 }

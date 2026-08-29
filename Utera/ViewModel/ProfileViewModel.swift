@@ -15,7 +15,6 @@ enum ProfileState: Equatable {
     case idle
 }
 
-
 @Observable
 final class ProfileViewModel {
     var date: Date = .now

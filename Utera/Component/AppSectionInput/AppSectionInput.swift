@@ -11,7 +11,6 @@ struct AppSectionInput<Content: View>: View {
     @ViewBuilder
     let content: Content
     
-    
     var body: some View {
         HStack {
             content
@@ -26,7 +25,7 @@ struct AppSectionInput<Content: View>: View {
 }
 
 #Preview {
-    AppSectionInput() {
+    AppSectionInput {
         Text("Hello")
     }
 }

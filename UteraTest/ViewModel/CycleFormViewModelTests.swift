@@ -21,7 +21,6 @@ struct CycleFormViewModelTests {
         self.container = try ModelContainer(for: CycleModel.self, configurations: config)
     }
     
-    
     @Test("rejecting non date")
     func rejectNonDate() {
         let viewModel = CycleFormViewModel()
@@ -89,7 +88,6 @@ struct CycleFormViewModelTests {
         #expect(viewModel.hasSubmitted == true)
         #expect(res == false)
     }
-    
     
     @Test("success scenario")
     func successScenario() {

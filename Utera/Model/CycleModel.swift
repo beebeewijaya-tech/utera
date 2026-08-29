@@ -8,7 +8,6 @@
 import SwiftUI
 import SwiftData
 
-
 @Model
 class CycleModel {
     var date: Date
