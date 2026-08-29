@@ -5,8 +5,8 @@
 //  Created by Bee Wijaya on 26/06/26.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct Pill: Identifiable {
     var id: UUID = UUID()
@@ -15,11 +15,13 @@ struct Pill: Identifiable {
 
 struct CycleForm: View {
     // MARK: - ViewModel
+
     @Environment(OnboardingViewModel.self) private var onboardingVM
     @Environment(SnackbarViewModel.self) private var snackbarVM
-    @State private var cycleFormVM = CycleFormViewModel()
-    
+    @State private var cycleFormVM: CycleFormViewModel
+
     // MARK: - Property
+
     @State private var cycleRegular: [Pill] = [
         Pill(label: "Pretty regular"),
         Pill(label: "Varies a lot"),
@@ -30,24 +32,32 @@ struct CycleForm: View {
         Pill(label: "Trying to conceive"),
         Pill(label: "Avoiding pregnancy")
     ]
-    
+
     // MARK: - Model
+
     @Environment(\.modelContext) private var modelContext
 
     // MARK: - Function
+
     func submitForm() {
-        let res = cycleFormVM.submit(context: modelContext)
-        
+        let res = cycleFormVM.submit()
+
         if let err = cycleFormVM.errors.first {
             snackbarVM.showMessage(err)
             return
         }
-        
+
         if res {
             onboardingVM.onboardingState = .finish
         }
     }
-    
+
+    // MARK: - Init
+
+    init(cycleStorage: ICycleStorage) {
+        _cycleFormVM = State(initialValue: CycleFormViewModel(cycleStorage: cycleStorage))
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -55,12 +65,12 @@ struct CycleForm: View {
                     .font(.title)
                     .bold()
                     .padding(.bottom, 8)
-                
+
                 Text("This sets your starting predictions. You can change everything later.")
                     .font(.callout)
                     .foregroundStyle(Color("TextSecondary"))
                     .padding(.bottom, 20)
-                
+
                 AppSectionInput {
                     VStack(alignment: .leading) {
                         Text("Last period started")
@@ -68,15 +78,15 @@ struct CycleForm: View {
                             .bold()
                             .foregroundStyle(Color("TextPrimary"))
                             .padding(.bottom, 2)
-                        
+
                         Text("Required")
                             .font(.caption2)
                             .foregroundStyle(Color("Primary"))
                     }
-                    
+
                     DatePicker("", selection: $cycleFormVM.date, displayedComponents: .date)
                 }
-                
+
                 AppSectionInput {
                     VStack(alignment: .leading) {
                         Text("Average cycle length")
@@ -84,7 +94,7 @@ struct CycleForm: View {
                             .bold()
                             .foregroundStyle(Color("TextPrimary"))
                             .padding(.bottom, 2)
-                        
+
                         Text("Period to period")
                             .font(.caption2)
                             .foregroundStyle(Color("TextSecondary"))
@@ -92,7 +102,7 @@ struct CycleForm: View {
                     Spacer()
                     AppCounter(value: $cycleFormVM.avgCycle, label: "d")
                 }
-                
+
                 AppSectionInput {
                     VStack(alignment: .leading) {
                         Text("Average period length")
@@ -100,7 +110,7 @@ struct CycleForm: View {
                             .bold()
                             .foregroundStyle(Color("TextPrimary"))
                             .padding(.bottom, 2)
-                        
+
                         Text("Days of bleeding")
                             .font(.caption2)
                             .foregroundStyle(Color("TextSecondary"))
@@ -109,12 +119,12 @@ struct CycleForm: View {
                     AppCounter(value: $cycleFormVM.avgPeriod, label: "d")
                 }
                 .padding(.bottom, 12)
-                
+
                 VStack(alignment: .leading) {
                     Text("Cycle regularity")
                         .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
-                    
+
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(cycleRegular.indices, id: \.self) { idx in
@@ -137,7 +147,7 @@ struct CycleForm: View {
                     Text("Tracking Goal")
                         .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
-                    
+
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(trackingGoal.indices, id: \.self) { idx in
@@ -172,8 +182,10 @@ struct CycleForm: View {
     ZStack {
         Color("Background")
             .ignoresSafeArea(.all)
-        
-        CycleForm()
+
+        CycleForm(
+            cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext)
+        )
     }
     .environment(OnboardingViewModel())
     .environment(SnackbarViewModel())

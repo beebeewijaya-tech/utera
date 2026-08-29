@@ -5,29 +5,32 @@
 //  Created by Bee Wijaya on 26/06/26.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct UteraApp: App {
     private var container: ModelContainer
+    private var cyclePromptStorage: ICyclePromptStorage
     private var cycleStorage: ICycleStorage
-    
+
     init() {
         do {
-            self.container = try ModelContainer(
+            container = try ModelContainer(
                 for: CycleModel.self, NotificationModel.self, CyclePredictModel.self
             )
-            self.cycleStorage = CycleStorage(context: self.container.mainContext)
+            cyclePromptStorage = CyclePromptStorage(context: container.mainContext)
+            cycleStorage = CycleStorage(context: container.mainContext)
         } catch {
             fatalError(error.localizedDescription)
         }
     }
-    
+
     var body: some Scene {
         WindowGroup {
             MainScreen(
-                cycleStorage: cycleStorage,
+                cyclePromptStorage: cyclePromptStorage,
+                cycleStorage: cycleStorage
             )
         }
         .modelContainer(container)
