@@ -30,7 +30,7 @@ enum DayStyle {
         case .inactive:
             return .black
         case .period:
-            return .black
+            return .red
         }
     }
     
@@ -51,33 +51,62 @@ enum DayStyle {
             return 5
         }
     }
+    
+    var label: String {
+        switch self {
+        case .active:
+            return "Today"
+        case .inactive:
+            return "Normal day"
+        case .period:
+            return "Period day"
+        }
+    }
+    
+    var labelColor: Color {
+        switch self {
+        case .active:
+            return Color("System")
+        case .inactive:
+            return .black
+        case .period:
+            return .red
+        }
+    }
 }
 
 struct AppDayPill: View {
     var label: String
     var style: DayStyle
+    var empty: Bool = false
     
     var body: some View {
         HStack {
-            VStack {
-                ZStack {
-                    Text(label)
-                        .font(.callout)
-                        .foregroundStyle(style.foreground)
-                        .bold()
-                    
-                    Circle()
-                        .fill(Color("Primary"))
-                        .frame(width: style.pill, height: style.pill)
-                        .padding(.top, 25)
-                }
-            }
-            .padding(20)
-            .background(style.background)
-            .clipShape(Circle())
-            .overlay {
+            if empty {
                 Circle()
-                    .stroke(style: StrokeStyle(lineWidth: style.border))
+                    .fill(.clear)
+                    .frame(width: 40, height: 40)
+            } else {
+                VStack {
+                    ZStack {
+                        Text(label)
+                            .font(.system(size: 12))
+                            .foregroundStyle(style.foreground)
+                            .bold()
+                        
+                        Circle()
+                            .fill(Color("Primary"))
+                            .frame(width: style.pill, height: style.pill)
+                            .padding(.top, 25)
+                    }
+                }
+                .frame(width: 40, height: 40)
+                .background(style.background)
+                .clipShape(Circle())
+                .overlay {
+                    Circle()
+                        .stroke(style.foreground, style: StrokeStyle(lineWidth: style.border))
+                }
             }
         }
     }
