@@ -11,8 +11,9 @@ import SwiftUI
 struct MainScreen: View {
     // MARK: - ViewModel
 
-    @State private var snackbarVM: SnackbarViewModel = .init()
+    @State private var snackbarVM: SnackbarViewModel = SnackbarViewModel()
     @State private var onboardingVM = OnboardingViewModel()
+    @State private var calendarVM: CalendarViewModel = CalendarViewModel()
 
     // MARK: - Propertes
 
@@ -32,6 +33,7 @@ struct MainScreen: View {
 
                     Tab("Calendar", systemImage: "calendar") {
                         CalendarScreen()
+                            .environment(calendarVM)
                     }
 
                     Tab("Profile", systemImage: "person.fill") {
