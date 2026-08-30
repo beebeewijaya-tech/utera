@@ -42,7 +42,7 @@ struct GetStartedScreen: View {
             .padding(.bottom, 8)
             
             AppButton(label: "Get Started", style: .primary) {
-                onboardingVM.onboardingState = .cycleForm
+                onboardingVM.setState(.cycleForm)
             }
         }
         .padding(.horizontal, 30)

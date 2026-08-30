@@ -17,4 +17,8 @@ final class OnboardingViewModel {
         didSet { UserDefaults.standard.set(onboarding, forKey: "onboarding") }
     }
     var onboardingState: OnboardingState = .getStarted
+    
+    func setState(_ state: OnboardingState) {
+        onboardingState = state
+    }
 }

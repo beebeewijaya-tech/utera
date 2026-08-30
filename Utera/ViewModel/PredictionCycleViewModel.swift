@@ -9,6 +9,12 @@ import FoundationModels
 import SwiftData
 import SwiftUI
 
+enum PredictionCycleState: Equatable {
+    case idle
+    case error(String)
+    case loading
+}
+
 @Observable
 final class PredictionCycleViewModel {
     // MARK: - State
@@ -18,12 +24,10 @@ final class PredictionCycleViewModel {
     var avgPeriod: Int = 0
     var selectedCycleRegular: String = ""
     var selectedTrackingGoal: String = ""
-    var isLoading = false
-    var err = ""
     var result: CyclePromptTask?
+    var state: PredictionCycleState = .idle
 
     // MARK: - Props
-
     var llm: any ILLMManager<CyclePromptTask>
     var cyclePromptStorage: ICyclePromptStorage
 
@@ -36,9 +40,8 @@ final class PredictionCycleViewModel {
     }
 
     func generate() async {
-        guard isLoading == false else { return } // prevent double submit / race cond
-        isLoading = true
-        defer { isLoading = false } // ensure to quit isLoading if function done
+        guard state != .loading else { return } // prevent double submit / race cond
+        state = .loading
 
         do {
             let prompt = """
@@ -60,8 +63,10 @@ final class PredictionCycleViewModel {
             if let result {
                 try cyclePromptStorage.save(result: result)
             }
+            
+            state = .idle
         } catch {
-            err = error.localizedDescription
+            state = .error(error.localizedDescription)
         }
     }
 
