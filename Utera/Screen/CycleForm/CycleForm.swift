@@ -48,7 +48,7 @@ struct CycleForm: View {
         }
 
         if res {
-            onboardingVM.onboardingState = .finish
+            onboardingVM.setState(.finish)
         }
     }
 

@@ -25,15 +25,13 @@ struct HomeScreen: View {
     }
 
     // MARK: - State
-
     @State private var currentDate: Date = .now
 
     // MARK: - ViewModel
-
+    @Environment(SnackbarViewModel.self) private var snackbarVM
     @State private var predictionCycleVM: PredictionCycleViewModel
-
+    
     // MARK: - Properties
-
     var nextPeriodFormatted: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -42,7 +40,6 @@ struct HomeScreen: View {
     }
 
     // MARK: - Function
-
     func resync() async {
         cyclesPredicted.forEach { modelContext.delete($0) }
         predictionCycleVM.result = nil
@@ -52,7 +49,6 @@ struct HomeScreen: View {
     }
 
     // MARK: - Init
-
     init(cyclePromptStorage: ICyclePromptStorage) {
         _predictionCycleVM = State(initialValue: PredictionCycleViewModel(
             cyclePromptStorage: cyclePromptStorage
@@ -88,7 +84,10 @@ struct HomeScreen: View {
             }
             .padding(.bottom, 30)
 
-            if !predictionCycleVM.isLoading {
+            switch predictionCycleVM.state {
+            case .loading:
+                ProgressView()
+            default:
                 FertileWindow(currentDate: currentDate, cyclePredicted: predictionCycleVM.result)
                     .padding(.bottom, 20)
 
@@ -108,8 +107,6 @@ struct HomeScreen: View {
                         .font(.caption)
                         .bold()
                 }
-            } else {
-                ProgressView()
             }
             Spacer()
         }
@@ -118,6 +115,12 @@ struct HomeScreen: View {
         .task {
             await predictionCycleVM.load(cycle: cycle, cyclePredicted: cyclePredicted)
         }
+        .onChange(of: predictionCycleVM.state) { old, new in
+            if old != new, case let .error(error) = new {
+                snackbarVM.showMessage(error, type: .danger)
+            }
+        }
+        .snackbar()
     }
 }
 
@@ -127,5 +130,6 @@ struct HomeScreen: View {
             .ignoresSafeArea(.all)
 
         HomeScreen(cyclePromptStorage: CyclePromptStorage(context: PreviewContainer.shared.mainContext))
+            .environment(SnackbarViewModel())
     }
 }
