@@ -5,6 +5,7 @@
 //  Created by Bee Wijaya on 28/08/26.
 //
 
+import SwiftData
 import SwiftUI
 
 struct CalendarScreen: View {
@@ -16,6 +17,7 @@ struct CalendarScreen: View {
     private var legends: [DayStyle] = [
         .active,
         .inactive,
+        .fertile,
         .period
     ]
     
@@ -28,10 +30,13 @@ struct CalendarScreen: View {
                     .foregroundStyle(.black)
                     .clipShape(Circle())
                     .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 1)
+                    .onTapGesture {
+                        calendarVM.setMonth(month: calendarVM.selectedMonth - 1)
+                    }
                 
                 Spacer()
                 
-                Text("August 2026")
+                Text(calendarVM.monthLabel())
                     .font(.title3)
                     .bold()
                     .foregroundStyle(Color("Primary"))
@@ -44,29 +49,37 @@ struct CalendarScreen: View {
                     .foregroundStyle(.black)
                     .clipShape(Circle())
                     .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 1)
+                    .onTapGesture {
+                        calendarVM.setMonth(month: calendarVM.selectedMonth + 1)
+                    }
                 
             }
             .padding(.bottom, 24)
             
-            if calendarVM.dates.count > 1 {
-                LazyVGrid(columns: columns) {
-                    ForEach(calendarVM.weeks, id: \.self) { weeks in
-                        if let week = weeks.first {
-                            Text("\(week)")
-                                .foregroundStyle(Color("Primary"))
-                                .bold()
+            switch calendarVM.state {
+            case .loading:
+                ProgressView()
+            case .idle:
+                if calendarVM.dates.count > 1 {
+                    LazyVGrid(columns: columns) {
+                        ForEach(calendarVM.weeks, id: \.self) { weeks in
+                            if let week = weeks.first {
+                                Text("\(week)")
+                                    .foregroundStyle(Color("Primary"))
+                                    .bold()
+                            }
+                        }
+                        
+                        ForEach(calendarVM.dates, id: \.id) { day in
+                            AppDayPill(
+                                label: calendarVM.label(date: day.date),
+                                style: calendarVM.getStyle(date: day.date),
+                                empty: day.date == nil
+                            )
                         }
                     }
-                    
-                    ForEach(calendarVM.dates, id: \.id) { day in
-                        AppDayPill(
-                            label: calendarVM.label(date: day.date),
-                            style: calendarVM.getStyle(date: day.date),
-                            empty: day.date == nil
-                        )
-                    }
+                    .padding(.bottom, 20)
                 }
-                .padding(.bottom, 20)
             }
             
             VStack(alignment: .leading) {
@@ -90,11 +103,15 @@ struct CalendarScreen: View {
         .padding()
         .task {
             calendarVM.getDaysInCurrentMonth()
+            calendarVM.setCycle()
         }
     }
 }
 
 #Preview {
     CalendarScreen()
-        .environment(CalendarViewModel())
+        .environment(CalendarViewModel(
+            cyclePromptStorage: CyclePromptStorage(context: PreviewContainer.shared.mainContext),
+            cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext)
+        ))
 }

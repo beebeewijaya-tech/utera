@@ -12,20 +12,38 @@ struct DateCell: Identifiable, Hashable {
     var date: Date?
 }
 
+enum CalendarState: Hashable {
+    case idle
+    case loading
+}
+
 @Observable
 class CalendarViewModel {
-    var calendar = Calendar.current
+    private var calendar = Calendar.current
     let date = Date()
     let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
-    var component = DateComponents()
+    private var component = DateComponents()
     var selectedMonth: Int = 0
     var selectedYear: Int = 0
     var dates: [DateCell] = []
+    var state: CalendarState = .idle
+    var fertileWindow: [Date?] = []
+    var nextPeriodWindow: [Date?] = []
+    var ovulationDay: Int = 0
+    var advise: String = ""
     
-    init() {
+    // MARK: - Props
+    private var cyclePromptStorage: ICyclePromptStorage
+    private var cycleStorage: ICycleStorage
+
+    init(cyclePromptStorage: ICyclePromptStorage, cycleStorage: ICycleStorage) {
+        self.cyclePromptStorage = cyclePromptStorage
+        self.cycleStorage = cycleStorage
+        
         calendar.firstWeekday = 1
         getCurrentMonth()
+        setCycle()
     }
     
     func getCurrentMonth() {
@@ -37,10 +55,28 @@ class CalendarViewModel {
     }
     
     func setMonth(month: Int) {
+        guard state == .idle else { return }
+        state = .loading
+        defer { state = .idle }
+        
         selectedMonth = month
         component.month = month
         
         getDaysInCurrentMonth()
+    }
+    
+    func setCycle() {
+        do {
+            let cyclePredict = try cyclePromptStorage.load()
+            let cycle = try cycleStorage.load()
+            guard let cyclePredict, let cycle else { return }
+            
+            advise = cyclePredict.advise
+            getFertileWindow(cyclePredict: cyclePredict)
+            getNextPeriodWindow(cyclePredict: cyclePredict, cycle: cycle)
+        } catch {
+            print("Error: \(error)")
+        }
     }
     
     func getDaysInCurrentMonth() {
@@ -83,11 +119,45 @@ class CalendarViewModel {
     func getStyle(date: Date?) -> DayStyle {
         guard let date else { return .inactive }
         
-        let isToday = calendar.isDateInToday(date)
-        if isToday {
-            return .active
-        }
+        if calendar.isDateInToday(date) { return .active }
+        if nextPeriodWindow.contains(date) { return .period }
+        if fertileWindow.contains(date) { return .fertile }
         
         return .inactive
+    }
+    
+    func monthLabel() -> String {
+        let date = calendar.date(from: component)
+        guard let date else { return "" }
+        
+        return date.formatted(.dateTime.month(.wide).year())
+    }
+    
+    func getOvulation() {
+        guard let fertilityEnd = fertileWindow.last, let fertilityEnd else { return }
+        let different = calendar.dateComponents([.day], from: .now, to: fertilityEnd)
+        ovulationDay = different.day ?? 0
+    }
+    
+    // MARK: - Internal function
+    private func parseDate(date: String) -> Date {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.date(from: date) ?? .now
+    }
+    
+    private func getFertileWindow(cyclePredict: CyclePredictModel) {
+        let fertileWindowStart = parseDate(date: cyclePredict.fertileWindowStart)
+        let fertileWindowEnd = parseDate(date: cyclePredict.fertileWindowEnd)
+        let fertileDaysDifferent = calendar.dateComponents([.day], from: fertileWindowStart, to: fertileWindowEnd)
+        guard let fertileDays = fertileDaysDifferent.day else { return }
+        fertileWindow = (0...fertileDays).map { calendar.date(byAdding: .day, value: $0, to: fertileWindowStart) }
+    }
+    
+    private func getNextPeriodWindow(cyclePredict: CyclePredictModel, cycle: CycleModel) {
+        let nextPeriod = parseDate(date: cyclePredict.nextPeriodDate)
+        let avgPeriod = cycle.avgPeriod
+        nextPeriodWindow = (0...avgPeriod).map { calendar.date(byAdding: .day, value: $0, to: nextPeriod )}
     }
 }

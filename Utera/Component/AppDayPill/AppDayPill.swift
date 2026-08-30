@@ -10,6 +10,7 @@ import SwiftUI
 enum DayStyle {
     case active
     case inactive
+    case fertile
     case period
     
     var background: Color {
@@ -18,8 +19,10 @@ enum DayStyle {
             return Color("System")
         case .inactive:
             return .clear
-        case .period:
+        case .fertile:
             return .clear
+        case .period:
+            return Color("Primary")
         }
     }
     
@@ -29,25 +32,27 @@ enum DayStyle {
             return .white
         case .inactive:
             return .black
+        case .fertile:
+            return Color("Prediction")
         case .period:
-            return .red
+            return .white
         }
     }
     
     var border: CGFloat {
         switch self {
-        case .active:
+        case .active, .period:
             return 0
-        case .inactive, .period:
+        case .inactive, .fertile:
             return 1
         }
     }
     
     var pill: CGFloat {
         switch self {
-        case .active, .inactive:
+        case .active, .inactive, .period:
             return 0
-        case .period:
+        case .fertile:
             return 5
         }
     }
@@ -58,6 +63,8 @@ enum DayStyle {
             return "Today"
         case .inactive:
             return "Normal day"
+        case .fertile:
+            return "Fertile day"
         case .period:
             return "Period day"
         }
@@ -69,8 +76,10 @@ enum DayStyle {
             return Color("System")
         case .inactive:
             return .black
+        case .fertile:
+            return Color("Prediction")
         case .period:
-            return .red
+            return Color("Primary")
         }
     }
 }
@@ -95,7 +104,7 @@ struct AppDayPill: View {
                             .bold()
                         
                         Circle()
-                            .fill(Color("Primary"))
+                            .fill(style.foreground)
                             .frame(width: style.pill, height: style.pill)
                             .padding(.top, 25)
                     }
@@ -125,6 +134,10 @@ struct AppDayPill: View {
         AppDayPill(
             label: "3",
             style: .period
+        )
+        AppDayPill(
+            label: "4",
+            style: .fertile
         )
     }
 }

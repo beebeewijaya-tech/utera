@@ -11,6 +11,7 @@ import SwiftUI
 protocol ICycleStorage {
     func save(payload: CycleModel) throws
     func delete(payload: CycleModel) throws
+    func load() throws -> CycleModel?
 }
 
 class CycleStorage: ICycleStorage {
@@ -18,6 +19,12 @@ class CycleStorage: ICycleStorage {
 
     init(context: ModelContext) {
         self.context = context
+    }
+    
+    func load() throws -> CycleModel? {
+        let predicate = FetchDescriptor<CycleModel>(sortBy: [SortDescriptor(\.createdAt)])
+        let result = try context.fetch(predicate)
+        return result.first
     }
 
     func save(payload: CycleModel) throws {

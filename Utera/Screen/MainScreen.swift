@@ -13,13 +13,28 @@ struct MainScreen: View {
 
     @State private var snackbarVM: SnackbarViewModel = SnackbarViewModel()
     @State private var onboardingVM = OnboardingViewModel()
-    @State private var calendarVM: CalendarViewModel = CalendarViewModel()
+    @State private var calendarVM: CalendarViewModel
 
     // MARK: - Propertes
-
     var cyclePromptStorage: ICyclePromptStorage
     var cycleStorage: ICycleStorage
     var notificationStorage: INotificationStorage
+    
+    // MARK: - Init
+    init(
+        cyclePromptStorage: ICyclePromptStorage,
+        cycleStorage: ICycleStorage,
+        notificationStorage: INotificationStorage
+    ) {
+        self.cyclePromptStorage = cyclePromptStorage
+        self.cycleStorage = cycleStorage
+        self.notificationStorage = notificationStorage
+        
+        self._calendarVM = State(initialValue: CalendarViewModel(
+            cyclePromptStorage: cyclePromptStorage,
+            cycleStorage: cycleStorage
+        ))
+    }
 
     var body: some View {
         VStack {
@@ -33,7 +48,6 @@ struct MainScreen: View {
 
                     Tab("Calendar", systemImage: "calendar") {
                         CalendarScreen()
-                            .environment(calendarVM)
                     }
 
                     Tab("Profile", systemImage: "person.fill") {
@@ -53,6 +67,7 @@ struct MainScreen: View {
         }
         .environment(onboardingVM)
         .environment(snackbarVM)
+        .environment(calendarVM)
     }
 }
 

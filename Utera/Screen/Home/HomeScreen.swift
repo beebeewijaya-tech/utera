@@ -10,9 +10,7 @@ import SwiftUI
 
 struct HomeScreen: View {
     // MARK: - Storage
-
     @Environment(\.modelContext) private var modelContext: ModelContext
-
     @Query private var cycles: [CycleModel]
     @Query private var cyclesPredicted: [CyclePredictModel]
 
@@ -29,6 +27,7 @@ struct HomeScreen: View {
 
     // MARK: - ViewModel
     @Environment(SnackbarViewModel.self) private var snackbarVM
+    @Environment(CalendarViewModel.self) private var calendarVM
     @State private var predictionCycleVM: PredictionCycleViewModel
     
     // MARK: - Properties
@@ -46,6 +45,7 @@ struct HomeScreen: View {
 
         // will call generate
         await predictionCycleVM.generate()
+        calendarVM.getOvulation()
     }
 
     // MARK: - Init
@@ -59,11 +59,11 @@ struct HomeScreen: View {
         VStack {
             HStack {
                 VStack(alignment: .leading) {
-                    Text(currentDate, format: .dateTime.weekday(.wide).month(.abbreviated).day())
+                    Text(calendarVM.date, format: .dateTime.weekday(.wide).month(.abbreviated).day())
                         .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
 
-                    Text("Hi, Maya")
+                    Text("Hi, User")
                         .font(.title)
                         .bold()
                         .foregroundStyle(Color("TextPrimary"))
@@ -88,7 +88,7 @@ struct HomeScreen: View {
             case .loading:
                 ProgressView()
             default:
-                FertileWindow(currentDate: currentDate, cyclePredicted: predictionCycleVM.result)
+                FertileWindow()
                     .padding(.bottom, 20)
 
                 VStack {
@@ -114,6 +114,7 @@ struct HomeScreen: View {
         .padding(.vertical, 12)
         .task {
             await predictionCycleVM.load(cycle: cycle, cyclePredicted: cyclePredicted)
+            calendarVM.getOvulation()
         }
         .onChange(of: predictionCycleVM.state) { old, new in
             if old != new, case let .error(error) = new {
@@ -131,5 +132,9 @@ struct HomeScreen: View {
 
         HomeScreen(cyclePromptStorage: CyclePromptStorage(context: PreviewContainer.shared.mainContext))
             .environment(SnackbarViewModel())
+            .environment(CalendarViewModel(
+                cyclePromptStorage: CyclePromptStorage(context: PreviewContainer.shared.mainContext),
+                cycleStorage: CycleStorage(context: PreviewContainer.shared.mainContext)
+            ))
     }
 }

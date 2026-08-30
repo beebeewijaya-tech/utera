@@ -10,8 +10,13 @@ import Testing
 
 class FakeCyclePromptStorage: ICyclePromptStorage {
     // MARK: - spy
-
+    var loadCalled: Int = 0
     var saveCalled: Int = 0
+    
+    func load() throws -> CyclePredictModel? {
+        loadCalled += 1
+        return nil
+    }
 
     func save(result _: CyclePromptTask) throws {
         saveCalled += 1
@@ -23,6 +28,12 @@ class FakeCycleStorage: ICycleStorage {
 
     var saveCalled: Int = 0
     var deleteCalled: Int = 0
+    var loadCalled: Int = 0
+    
+    func load() throws -> CycleModel? {
+        loadCalled += 1
+        return nil
+    }
 
     func save(payload: CycleModel) throws {
         saveCalled += 1
