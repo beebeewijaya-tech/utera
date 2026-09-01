@@ -84,9 +84,9 @@ enum DayStyle {
         case .inactive:
             return .black
         case .fertile, .peak:
-            return Color("Prediction")
-        case .period:
             return Color("Primary")
+        case .period:
+            return Color("PrimaryDark")
         }
     }
 }

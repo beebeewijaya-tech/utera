@@ -37,17 +37,20 @@ struct FertileWindow: View {
             }
             .padding(.bottom, 12)
             
-            HStack {
-                Circle()
-                    .stroke(style: StrokeStyle(lineWidth: 3))
-                    .fill(Color("Prediction"))
-                    .frame(width: 10, height: 10)
+            if calendarVM.getNearestFertile() > 0  {
+                HStack {
+                    Circle()
+                        .stroke(style: StrokeStyle(lineWidth: 3))
+                        .fill(Color("Prediction"))
+                        .frame(width: 10, height: 10)
+                    
+                    Text("Next Fertility in: \(calendarVM.getNearestFertile()) days")
+                        .font(.caption)
+                        .foregroundStyle(Color("Prediction"))
+                }
+                .padding(.bottom, 12)
                 
-                Text("Next Fertility in: \(calendarVM.getNearestFertile()) days")
-                    .font(.caption)
-                    .foregroundStyle(Color("Prediction"))
             }
-            .padding(.bottom, 12)
             
             HStack {
                 Circle()
@@ -66,8 +69,8 @@ struct FertileWindow: View {
             }
             .padding(.bottom, 12)
             
-            if calendarVM.ovulationDay != 0 {
-                HStack(alignment: .top, spacing: 16) {
+            HStack(alignment: .top, spacing: 16) {
+                if calendarVM.ovulationDay != 0 {
                     Image(systemName: "heart.fill")
                         .resizable()
                         .frame(width: 10, height: 10)
@@ -82,17 +85,18 @@ struct FertileWindow: View {
                             .bold()
                             .foregroundStyle(Color("System"))
                         
-                        Text(calendarVM.advise)
-                            .font(.caption)
-                            .foregroundStyle(Color("System").opacity(0.8))
-                            .italic()
                     }
                 }
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color("System").opacity(0.2))
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                
+                Text(calendarVM.advise)
+                    .font(.caption)
+                    .foregroundStyle(Color("System").opacity(0.8))
+                    .italic()
             }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color("System").opacity(0.2))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
