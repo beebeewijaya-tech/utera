@@ -412,6 +412,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Utera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = YouTera;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Do you want to allow Utera to use Face ID?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -451,6 +452,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Utera/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = YouTera;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Do you want to allow Utera to use Face ID?";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

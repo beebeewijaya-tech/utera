@@ -9,11 +9,14 @@ import SwiftData
 import SwiftUI
 
 struct MainScreen: View {
+    @Environment(\.scenePhase) private var scenePhase
+
     // MARK: - ViewModel
 
     @State private var snackbarVM: SnackbarViewModel = SnackbarViewModel()
     @State private var onboardingVM = OnboardingViewModel()
     @State private var calendarVM: CalendarViewModel
+    @State private var authVM = AuthenticationViewModel()
 
     // MARK: - Propertes
     var cyclePromptStorage: ICyclePromptStorage
@@ -38,7 +41,9 @@ struct MainScreen: View {
 
     var body: some View {
         VStack {
-            if onboardingVM.onboarding {
+            if authVM.authState != .authenticated {
+                AuthenticationScreen()
+            } else if onboardingVM.onboarding {
                 TabView {
                     Tab("Home", systemImage: "house.fill") {
                         HomeScreen(
@@ -68,6 +73,17 @@ struct MainScreen: View {
         .environment(onboardingVM)
         .environment(snackbarVM)
         .environment(calendarVM)
+        .environment(authVM)
+        .onChange(of: scenePhase) { _, newValue in
+            switch newValue {
+            case .background:
+                authVM.lockApp()
+            case .active:
+                Task { await authVM.requestToAuthenticate() }
+            default:
+                return
+            }
+        }
     }
 }
 
