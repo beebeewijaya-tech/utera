@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum LogTime {
     static let start = ContinuousClock.now
     

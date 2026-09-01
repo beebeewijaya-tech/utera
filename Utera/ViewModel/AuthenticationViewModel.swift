@@ -10,6 +10,7 @@ import LocalAuthentication
 
 enum AuthenticationState: Equatable {
     case idle
+    case loading
     case authenticated
     case error(String)
 }
@@ -38,6 +39,7 @@ class AuthenticationViewModel {
     
     func requestToAuthenticate() async {
         guard authState != .authenticated else { return }
+        authState = .loading
         
         do {
             _ = try await self.biometricService.authenticating()

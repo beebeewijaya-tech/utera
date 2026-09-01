@@ -120,7 +120,12 @@ class CalendarViewModel {
         
         if calendar.isDateInToday(date) { return .active }
         if nextPeriodWindow.contains(date) { return .period }
-        if fertileWindow.contains(date) { return .fertile }
+        
+        if fertileWindow.contains(date) {
+            let peaksFertile = fertileWindow.suffix(2)
+            
+            return peaksFertile.contains(date) ? .peak : .fertile
+        }
         
         return .inactive
     }

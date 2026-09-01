@@ -74,16 +74,6 @@ struct MainScreen: View {
         .environment(snackbarVM)
         .environment(calendarVM)
         .environment(authVM)
-        .onChange(of: scenePhase) { _, newValue in
-            switch newValue {
-            case .background:
-                authVM.lockApp()
-            case .active:
-                Task { await authVM.requestToAuthenticate() }
-            default:
-                return
-            }
-        }
     }
 }
 
