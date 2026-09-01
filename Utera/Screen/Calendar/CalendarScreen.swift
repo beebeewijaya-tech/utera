@@ -18,6 +18,7 @@ struct CalendarScreen: View {
         .active,
         .inactive,
         .fertile,
+        .peak,
         .period
     ]
     
@@ -85,9 +86,22 @@ struct CalendarScreen: View {
             VStack(alignment: .leading) {
                 ForEach(legends, id: \.self) { legend in
                     HStack {
-                        Circle()
-                            .fill(legend.labelColor)
-                            .frame(width: 5, height: 5)
+                        switch legend {
+                        case .fertile:
+                            Circle()
+                                .stroke(style: StrokeStyle(lineWidth: 1))
+                                .fill(legend.labelColor)
+                                .frame(width: 10, height: 10)
+                        case .peak:
+                            Circle()
+                                .stroke(style: StrokeStyle(lineWidth: 3))
+                                .fill(legend.labelColor)
+                                .frame(width: 10, height: 10)
+                        default:
+                            Circle()
+                                .fill(legend.labelColor)
+                                .frame(width: 10, height: 10)
+                        }
                         
                         Text(legend.label)
                             .foregroundStyle(legend.labelColor)

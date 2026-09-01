@@ -32,7 +32,7 @@ class CyclePredictModel {
 }
 
 @Generable
-struct CyclePromptTask {
+struct CyclePromptTask: Codable {
     @Guide(description: "Start of fertile window in YYYY-MM-DD format")
     var fertileWindowStart: String
     

@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>API_HOST</key>
+	<string>$(API_HOST)</string>
+	<key>API_PASSWORD</key>
+	<string>$(API_PASSWORD)</string>
+	<key>API_USERNAME</key>
+	<string>$(API_USERNAME)</string>
 	<key>NEWRELIC_TOKEN</key>
 	<string>$(NEWRELIC_TOKEN)</string>
 </dict>
