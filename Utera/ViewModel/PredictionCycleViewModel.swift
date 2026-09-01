@@ -32,7 +32,7 @@ final class PredictionCycleViewModel {
     var cyclePromptStorage: ICyclePromptStorage
 
     init(
-        llm: any ILLMManager<CyclePromptTask> = LLMManager<CyclePromptTask>(),
+        llm: any ILLMManager<CyclePromptTask> = LLMManager(),
         cyclePromptStorage: ICyclePromptStorage
     ) {
         self.llm = llm

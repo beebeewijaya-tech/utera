@@ -43,7 +43,6 @@ class CalendarViewModel {
         
         calendar.firstWeekday = 1
         getCurrentMonth()
-        setCycle()
     }
     
     func getCurrentMonth() {
@@ -136,7 +135,18 @@ class CalendarViewModel {
     func getOvulation() {
         guard let fertilityEnd = fertileWindow.last, let fertilityEnd else { return }
         let different = calendar.dateComponents([.day], from: .now, to: fertilityEnd)
-        ovulationDay = different.day ?? 0
+        
+        guard let day = different.day else { return }
+        if day <= 2 {
+            ovulationDay = day
+        }
+    }
+    
+    func getNearestFertile() -> Int {
+        guard let fertilityStart = fertileWindow.first, let fertilityStart else { return 0 }
+        let different = calendar.dateComponents([.day], from: .now, to: fertilityStart)
+        
+        return different.day ?? 0
     }
     
     // MARK: - Internal function
