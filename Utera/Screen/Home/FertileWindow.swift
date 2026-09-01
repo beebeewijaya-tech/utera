@@ -39,15 +39,28 @@ struct FertileWindow: View {
             
             HStack {
                 Circle()
+                    .stroke(style: StrokeStyle(lineWidth: 3))
+                    .fill(Color("Prediction"))
+                    .frame(width: 10, height: 10)
+                
+                Text("Next Fertility in: \(calendarVM.getNearestFertile()) days")
+                    .font(.caption)
+                    .foregroundStyle(Color("Prediction"))
+            }
+            .padding(.bottom, 12)
+            
+            HStack {
+                Circle()
                     .fill(Color("System"))
                     .frame(width: 10, height: 10)
+                
                 if calendarVM.ovulationDay > 0 {
                     Text("Ovulation in: \(calendarVM.ovulationDay) days")
-                        .font(.default)
+                        .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
                 } else {
-                    Text("None nearest ovulation")
-                        .font(.default)
+                    Text("Not near ovulation - safe")
+                        .font(.caption)
                         .foregroundStyle(Color("TextSecondary"))
                 }
             }

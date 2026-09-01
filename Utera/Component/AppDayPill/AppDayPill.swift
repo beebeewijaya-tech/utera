@@ -12,6 +12,7 @@ enum DayStyle {
     case inactive
     case fertile
     case period
+    case peak
     
     var background: Color {
         switch self {
@@ -19,7 +20,7 @@ enum DayStyle {
             return Color("System")
         case .inactive:
             return .clear
-        case .fertile:
+        case .fertile, .peak:
             return .clear
         case .period:
             return Color("Primary")
@@ -32,7 +33,7 @@ enum DayStyle {
             return .white
         case .inactive:
             return .black
-        case .fertile:
+        case .fertile, .peak:
             return Color("Prediction")
         case .period:
             return .white
@@ -43,7 +44,7 @@ enum DayStyle {
         switch self {
         case .active, .period:
             return 0
-        case .inactive, .fertile:
+        case .inactive, .fertile, .peak:
             return 1
         }
     }
@@ -54,6 +55,8 @@ enum DayStyle {
             return 0
         case .fertile:
             return 5
+        case .peak:
+            return 10
         }
     }
     
@@ -67,6 +70,8 @@ enum DayStyle {
             return "Fertile day"
         case .period:
             return "Period day"
+        case .peak:
+            return "Peak ovulation"
         }
     }
     
@@ -76,7 +81,7 @@ enum DayStyle {
             return Color("System")
         case .inactive:
             return .black
-        case .fertile:
+        case .fertile, .peak:
             return Color("Prediction")
         case .period:
             return Color("Primary")

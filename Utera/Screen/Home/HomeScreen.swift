@@ -114,6 +114,7 @@ struct HomeScreen: View {
         .padding(.vertical, 12)
         .task {
             await predictionCycleVM.load(cycle: cycle, cyclePredicted: cyclePredicted)
+            calendarVM.setCycle()
             calendarVM.getOvulation()
         }
         .onChange(of: predictionCycleVM.state) { old, new in
