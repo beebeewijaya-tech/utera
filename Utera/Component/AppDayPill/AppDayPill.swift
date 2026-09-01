@@ -23,7 +23,7 @@ enum DayStyle {
         case .fertile, .peak:
             return .clear
         case .period:
-            return Color("Primary")
+            return Color("PrimaryDark")
         }
     }
     
@@ -34,7 +34,7 @@ enum DayStyle {
         case .inactive:
             return .black
         case .fertile, .peak:
-            return Color("Prediction")
+            return Color("Primary")
         case .period:
             return .white
         }
@@ -44,8 +44,10 @@ enum DayStyle {
         switch self {
         case .active, .period:
             return 0
-        case .inactive, .fertile, .peak:
+        case .inactive, .fertile:
             return 1
+        case .peak:
+            return 3
         }
     }
     
@@ -56,7 +58,7 @@ enum DayStyle {
         case .fertile:
             return 5
         case .peak:
-            return 10
+            return 8
         }
     }
     
@@ -143,6 +145,10 @@ struct AppDayPill: View {
         AppDayPill(
             label: "4",
             style: .fertile
+        )
+        AppDayPill(
+            label: "5",
+            style: .peak
         )
     }
 }
