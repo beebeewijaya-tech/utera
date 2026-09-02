@@ -29,7 +29,11 @@ final class NetworkManager<T: Sendable & Codable, U: Codable & Sendable>: INetwo
         let res = try await AF.request("\(host)/\(path)")
             .cacheResponse(using: .cache)
             .validate()
-            .cURLDescription { print($0) }
+            .cURLDescription {
+                #if DEBUG
+                    print($0)
+                #endif
+            }
             .serializingDecodable(T.self)
             .value
     
@@ -46,7 +50,11 @@ final class NetworkManager<T: Sendable & Codable, U: Codable & Sendable>: INetwo
             .authenticate(username: username, password: password)
             .cacheResponse(using: .cache)
             .validate()
-            .cURLDescription { print($0) }
+            .cURLDescription {
+                #if DEBUG
+                    print($0)
+                #endif
+            }
             .serializingDecodable(T.self)
             .value
         

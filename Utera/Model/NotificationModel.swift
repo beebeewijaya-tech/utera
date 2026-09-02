@@ -16,3 +16,18 @@ class NotificationModel {
         self.days = days
     }
 }
+
+enum NotificationForm: String, CaseIterable {
+    case three, five, seven
+    
+    var label: String {
+        switch self {
+        case .three:
+            return "3"
+        case .five:
+            return "5"
+        case .seven:
+            return "7"
+        }
+    }
+}

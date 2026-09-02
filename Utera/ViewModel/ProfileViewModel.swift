@@ -26,9 +26,9 @@ final class ProfileViewModel {
     var dismissTask: Task<Void, Never>?
 
     // constant
-    let cycleRegularOptions = ["Pretty regular", "Varies a lot", "Not sure"]
-    let trackingGoalOptions = ["General tracking", "Trying to conceive", "Avoiding pregnancy"]
-    let daysOptions = ["3", "5", "7"]
+    let cycleRegularOptions: [CycleConditionForm] = [.regular, .varies, .notsure]
+    let trackingGoalOptions: [TrackingGoalForm] = [.general, .tryconceive, .avoid]
+    let daysOptions: [NotificationForm] = [.three, .five, .seven]
 
     // screen state
     var state: ProfileState = .idle

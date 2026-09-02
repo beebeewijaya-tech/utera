@@ -25,7 +25,6 @@ final class NotificationViewModel {
     }
     var permission: Bool = false
     
-    
     // MARK: - props
     var notificationStorage: INotificationStorage
     

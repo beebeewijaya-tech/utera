@@ -18,10 +18,10 @@ struct FinishOnboard: View {
     @Environment(\.modelContext) private var modelContext
     
     // MARK: - Property
-    @State private var daysRemindMe: [Pill] = [
-        Pill(label: "3"),
-        Pill(label: "5"),
-        Pill(label: "7")
+    @State private var daysRemindMe: [NotificationForm] = [
+        .three,
+        .five,
+        .seven
     ]
     
     // MARK: - Function
@@ -71,12 +71,13 @@ struct FinishOnboard: View {
                     .foregroundStyle(Color("TextSecondary"))
                 
                 HStack {
-                    ForEach(daysRemindMe) { idx in
+                    ForEach(daysRemindMe.indices, id: \.self) { idx in
+                        let day = daysRemindMe[idx]
                         AppPill(
-                            label: "\(idx.label) days",
-                            style: idx.label == notificationVM.days ? .active : .inactive
+                            label: "\(day.label) days",
+                            style: day.label == notificationVM.days ? .active : .inactive
                         ) {
-                            notificationVM.days = idx.label
+                            notificationVM.days = day.label
                         }
                     }
                 }

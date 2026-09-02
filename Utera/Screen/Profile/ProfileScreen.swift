@@ -107,8 +107,11 @@ struct ProfileScreen: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(profileVM.cycleRegularOptions, id: \.self) { option in
-                                AppPill(label: option, style: profileVM.selectedCycleRegular == option ? .active : .inactive) {
-                                    profileVM.selectedCycleRegular = option
+                                AppPill(
+                                    label: option.label,
+                                    style: profileVM.selectedCycleRegular == option.label ? .active : .inactive
+                                ) {
+                                    profileVM.selectedCycleRegular = option.label
                                 }
                             }
                         }
@@ -126,8 +129,11 @@ struct ProfileScreen: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(profileVM.trackingGoalOptions, id: \.self) { option in
-                                AppPill(label: option, style: profileVM.selectedTrackingGoal == option ? .active : .inactive) {
-                                    profileVM.selectedTrackingGoal = option
+                                AppPill(
+                                    label: option.label,
+                                    style: profileVM.selectedTrackingGoal == option.label ? .active : .inactive
+                                ) {
+                                    profileVM.selectedTrackingGoal = option.label
                                 }
                             }
                         }
@@ -151,9 +157,13 @@ struct ProfileScreen: View {
                             .padding(.bottom, 12)
                         
                         HStack(spacing: 8) {
-                            ForEach(profileVM.daysOptions, id: \.self) { option in
-                                AppPill(label: "\(option)d", style: profileVM.notificationDays == option ? .active : .inactive) {
-                                    profileVM.notificationDays = option
+                            ForEach(profileVM.daysOptions.indices, id: \.self) { idx in
+                                let day = profileVM.daysOptions[idx]
+                                AppPill(
+                                    label: "\(day.label)d",
+                                    style: profileVM.notificationDays == day.label ? .active : .inactive
+                                ) {
+                                    profileVM.notificationDays = day.label
                                 }
                             }
                         }
