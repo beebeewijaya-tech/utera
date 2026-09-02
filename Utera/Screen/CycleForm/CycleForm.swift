@@ -8,11 +8,6 @@
 import SwiftData
 import SwiftUI
 
-struct Pill: Identifiable {
-    var id: UUID = UUID()
-    var label: String
-}
-
 struct CycleForm: View {
     // MARK: - ViewModel
 
@@ -22,15 +17,15 @@ struct CycleForm: View {
 
     // MARK: - Property
 
-    @State private var cycleRegular: [Pill] = [
-        Pill(label: "Pretty regular"),
-        Pill(label: "Varies a lot"),
-        Pill(label: "Not sure")
+    @State private var cycleRegular: [CycleConditionForm] = [
+        CycleConditionForm.regular,
+        CycleConditionForm.varies,
+        CycleConditionForm.notsure
     ]
-    @State private var trackingGoal: [Pill] = [
-        Pill(label: "General tracking"),
-        Pill(label: "Trying to conceive"),
-        Pill(label: "Avoiding pregnancy")
+    @State private var trackingGoal: [TrackingGoalForm] = [
+        .general,
+        .tryconceive,
+        .avoid
     ]
 
     // MARK: - Model
